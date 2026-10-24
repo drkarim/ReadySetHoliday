@@ -226,6 +226,11 @@ textarea{resize:vertical}
 .difflist{margin:6px 0;padding-left:20px}
 details summary{min-height:44px;display:flex;align-items:center;font-weight:650;color:var(--accent)}
 
+.livedot{flex:none;min-height:44px;padding:0 2px;border:0;background:none}
+.livedot span{display:inline-block;font-size:12.5px;font-weight:750;padding:4px 9px;border-radius:99px;background:var(--surface2);color:var(--muted);white-space:nowrap}
+.livedot[data-s="live"] span{background:var(--ok-bg);color:var(--ok)}
+.livedot[data-s="offline"] span{background:var(--warn-bg);color:var(--warn-ink)}
+.livedot[data-s="error"] span{background:var(--c-bg);color:var(--c)}
 #toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(10px + env(safe-area-inset-top));z-index:50;background:var(--toast);color:#fff;padding:8px 8px 8px 14px;border-radius:12px;display:flex;gap:10px;align-items:center;width:max-content;max-width:calc(100vw - 32px);box-shadow:0 6px 20px rgba(0,0,0,.3);font-size:15.5px;min-height:44px}
 #toast .tbtn{border:0;background:none;color:#8fc4ff;font-weight:800;min-height:40px;padding:0 10px}
 
@@ -244,7 +249,7 @@ details summary{min-height:44px;display:flex;align-items:center;font-weight:650;
     <button class="btn primary block" data-act="newtrip">＋ New trip</button>
     <button class="btn block" data-act="paste">Paste a shared link or code</button>
     <button class="btn block" id="seedBtn" data-act="seed" hidden>Add the Barbados sample list</button>
-    <p class="note"><b>Saved on this device only.</b> There are no accounts: lists and ticks live in this browser. To copy them to another phone, open a trip and use <i>More → Share this list</i> or <i>Send my ticks</i>.</p>
+    <p class="note"><b>Saved on this device.</b> There are no accounts: lists and ticks live in this browser. To tick together on two phones, open a trip and turn on <i>More → Live sync</i>.</p>
   </main>
 </div>
 
@@ -258,6 +263,7 @@ details summary{min-height:44px;display:flex;align-items:center;font-weight:650;
         <input id="q" type="search" placeholder="Search items &amp; notes" aria-label="Search items and notes" autocomplete="off" enterkeyhint="search">
         <button id="qx" class="qx" aria-label="Clear search" hidden>✕</button>
       </div>
+      <button id="liveDot" class="livedot" data-act="tab" data-v="more" hidden></button>
       <button class="iconbtn" data-act="add" aria-label="Add an item">＋</button>
     </div>
     <div id="filters" hidden>
@@ -516,7 +522,11 @@ const getTrip = uid => DB.trips.find(t => t.uid === uid);
 const itemById = (t, id) => t.items.find(i => i.id === +id);
 const isPacked = (t, id) => !!(t.state[id] && t.state[id].p);
 const countPacked = (t, its = t.items) => its.filter(i => isPacked(t, i.id)).length;
-function setPacked(t, id, p) { t.state[id] = {p: p ? 1 : 0, t: Date.now()}; persist(); }
+function setPacked(t, id, p) {
+  t.state[id] = {p: p ? 1 : 0, t: Date.now()};
+  persist();
+  if (t.live) sendTicks(t, {['i' + id]: t.state[id]});
+}
 
 function catOrder(t) {
   const o = [];
@@ -618,6 +628,7 @@ function setTab(tab) {
   $('#searchBox').hidden = !filt;
   $('#tripTitle').hidden = filt;
   renderTitle();
+  renderLive();
   if (filt) renderChips();
   renderTab();
   window.scrollTo(0, 0);
@@ -898,8 +909,18 @@ function renderMore() {
     <button class="btn primary block" data-act="mkshare">Create share link</button>
     <div id="shOut"></div>
   </section>
-  <section class="card"><h2>Sync ticks with family</h2>
-    <div class="note"><b>Ticks are saved on this phone only.</b> There is no server, so another phone won’t see your progress automatically. To combine progress, one person taps <i>Send my ticks</i> and the other taps <i>Import ticks</i> and pastes it in. For each item, the most recent change wins, including un-ticks.</div>
+  <section class="card"><h2>Live sync</h2>
+    ${t.live ? `<p id="liveState" role="status"></p>
+      <p class="small">Phones that joined this trip’s live sync see each other’s ticks within seconds while the app is open. Ticks made with no signal are sent when you’re back online. Added or edited items still need <i>Share this list</i>.</p>
+      <button class="btn primary block" data-act="mkjoin">Invite another phone</button>
+      <div id="lvOut"></div>
+      <button class="btn block danger" data-act="stoplive">Turn off live sync on this phone</button>`
+    : `<p>Tick on one phone and see it on the other within seconds. Ticks are stored online under a random key that only people with the invite link have.</p>
+      <button class="btn primary block" data-act="startlive">Start live sync</button>
+      <p class="small">Already started on another phone? Open the invite link it gave you, or paste it into <i>Paste a shared link or code</i> on the home screen.</p>`}
+  </section>
+  <section class="card"><h2>Sync ticks by message</h2>
+    <div class="note">${t.live ? 'Live sync is on, so you don’t need this. ' : '<b>Without live sync, ticks are saved on this phone only.</b> '}To combine progress by message, one person taps <i>Send my ticks</i> and the other taps <i>Import ticks</i> and pastes it in. For each item, the most recent change wins, including un-ticks.</div>
     <label for="dev">This device’s name (shown to the other person)</label>
     <input id="dev" placeholder="e.g. Rashed’s phone" value="${h(DB.settings.device)}" autocomplete="off">
     <div class="row2"><button class="btn primary" data-act="mkstatus">Send my ticks</button><button class="btn" data-act="impstatus">Import ticks</button></div>
@@ -925,6 +946,7 @@ function renderMore() {
     <p class="small">Everything is stored in this browser. Clearing website data for this site erases it, so send your ticks to someone first. On iPhone, the Home Screen app and Safari keep <b>separate</b> copies.</p>
   </section>`;
   $('#dev').addEventListener('input', e => { DB.settings.device = e.target.value.trim(); persist(); });
+  renderLive();
 }
 
 function showOut(sel, text, title, msg) {
@@ -989,7 +1011,12 @@ async function statusPayload(t) {
 
 async function readCode(raw) {
   const s = clean(raw).replace(/\s+/g, '');
-  let m = s.match(/[?&]list=([a-z0-9-]+)/i);
+  let m = s.match(/[?&]live=([\w-]+)/);
+  if (m) {
+    const g = k => { const x = s.match(new RegExp('[?&]' + k + '=([^&#]+)')); try { return x ? decodeURIComponent(x[1]) : ''; } catch (e) { return ''; } };
+    return {kind:'live', key:m[1], u:g('u'), n:g('n'), slug:g('list').toLowerCase()};
+  }
+  m = s.match(/[?&]list=([a-z0-9-]+)/i);
   if (m) return {kind:'list', slug:m[1].toLowerCase()};
   try {
     if ((m = s.match(/#t=([\w-]+)/))) {
@@ -1079,6 +1106,7 @@ function importTripSheet(d) {
       if (asCopy) { t.uid = newUid(); t.name += ' (copy)'; }
       DB.trips.push(t); persist(); closeSheet();
       toast(`Added “${t.name}”`);
+      if (!asCopy) attachPendingLive(t);
       openTrip(t.uid);
     };
     if ($('#tAdd')) $('#tAdd').onclick = () => add(false);
@@ -1095,6 +1123,7 @@ function importTripSheet(d) {
       }
       persist(); closeSheet();
       toast(d.s ? `Updated “${exists.name}” · ${plural(n, 'tick')} merged` : `Updated “${exists.name}”`);
+      if (!attachPendingLive(exists)) liveResync(exists);
       if (UI.trip === exists) { resetFilters(); setTab(UI.tab); } else openTrip(exists.uid);
     };
   });
@@ -1120,6 +1149,7 @@ function statusSheet(d) {
     const b = $('#sApply');
     if (b) b.onclick = () => {
       df.apply.forEach(([id, p, ts]) => { t.state[id] = {p, t:ts}; });
+      liveResync(t);
       persist(); closeSheet();
       toast(`Merged: ${df.on} packed, ${df.off} unpacked`);
       if (UI.trip === t) { renderTitle(); if (!$('#filters').hidden) renderChips(); UI.focus.key = ''; renderTab(); }
@@ -1136,6 +1166,7 @@ function pasteSheet(title, intro) {
     $('#pGo').onclick = async () => {
       const r = await readCode($('#pTxt').value);
       if (!r) { $('#pMsg').textContent = 'That link or code couldn’t be read. Make sure you copied all of it.'; return; }
+      if (r.kind === 'live') { $('#pMsg').textContent = ''; const err = await joinLive(r); if (err) $('#pMsg').textContent = err; return; }
       if (r.kind === 'list') { $('#pMsg').textContent = ''; const err = await loadList(r.slug); if (err) $('#pMsg').textContent = err; return; }
       r.kind === 'trip' ? importTripSheet(r.data) : statusSheet(r.data);
     };
@@ -1318,6 +1349,148 @@ function editItem(id) {
   });
 }
 
+/* ---------- Live sync: Firebase Realtime Database through its REST API (no SDK) ----------
+   Ticks are stored at rooms/<random key>/ticks/i<id> = {p, t}. The database rules only allow
+   reading or writing a room by its exact key. As with Send/Import ticks, the newest change wins. */
+const LIVE_DB = 'https://readysetholiday-fcf4b-default-rtdb.europe-west1.firebasedatabase.app';
+const LIVE = {};
+let pendingLive = null;
+const roomURL = t => `${LIVE_DB}/rooms/${t.live}/ticks.json`;
+const validKey = k => /^[A-Za-z0-9_-]{24,64}$/.test(k || '');
+const liveStatus = t => t && t.live ? (LIVE[t.uid] ? LIVE[t.uid].status : 'offline') : 'off';
+function setLive(t, s) { if (LIVE[t.uid]) LIVE[t.uid].status = s; renderLive(); }
+
+function stopLive(uid) {
+  const L = LIVE[uid];
+  if (L) { L.es.close(); clearTimeout(L.retry); delete LIVE[uid]; }
+}
+
+// (Re)connecting streams the whole room first, which runs a full two-way merge.
+function startLive(t) {
+  stopLive(t.uid);
+  if (!t.live || !window.EventSource) return renderLive();
+  const es = new EventSource(roomURL(t));
+  LIVE[t.uid] = {es, status:'connecting', retry:null};
+  const onData = put => e => {
+    let msg;
+    try { msg = JSON.parse(e.data); } catch (_) { return; }
+    setLive(t, 'live');
+    if (!msg || typeof msg.path !== 'string') return;
+    const parts = msg.path.split('/');
+    if (msg.path === '/') put ? mergeFull(t, msg.data || {}) : applyRemote(t, msg.data || {});
+    else if (parts.length === 2) applyRemote(t, {[parts[1]]: msg.data});
+  };
+  es.addEventListener('put', onData(true));
+  es.addEventListener('patch', onData(false));
+  es.addEventListener('cancel', () => { es.close(); setLive(t, 'error'); });
+  es.onerror = () => setLive(t, es.readyState === 2 || !navigator.onLine ? 'offline' : 'connecting');
+  renderLive();
+}
+function liveResync(t) { if (t.live) startLive(t); }
+function liveAll() { DB.trips.forEach(t => { if (t.live) startLive(t); }); }
+
+function applyRemote(t, obj) {
+  let n = 0;
+  for (const [k, v] of Object.entries(obj || {})) {
+    const id = +String(k).replace(/^i/, '');
+    if (!v || typeof v.t !== 'number' || !itemById(t, id)) continue;
+    const cur = t.state[id];
+    if (v.t > (cur ? cur.t : 0)) { t.state[id] = {p: v.p ? 1 : 0, t: v.t}; n++; }
+  }
+  if (n) { persist(); refreshAfterRemote(t); }
+  return n;
+}
+
+function mergeFull(t, remote) {
+  applyRemote(t, remote);
+  const out = {};
+  for (const [id, v] of Object.entries(t.state)) {
+    const r = remote['i' + id];
+    if (v.t && itemById(t, id) && (!r || v.t > r.t)) out['i' + id] = {p: v.p, t: v.t};
+  }
+  if (Object.keys(out).length) sendTicks(t, out);
+}
+
+// Unsent ticks stay newer on this phone, so the next connection's full merge sends them.
+async function sendTicks(t, obj) {
+  try {
+    const r = await fetch(roomURL(t), {method:'PATCH', body:JSON.stringify(obj), keepalive:true});
+    if (r.status === 401 || r.status === 403) return setLive(t, 'error');
+    if (!r.ok) throw new Error(r.status);
+  } catch (e) {
+    setLive(t, 'offline');
+    const L = LIVE[t.uid];
+    if (L && !L.retry) L.retry = setTimeout(() => { if (t.live && navigator.onLine) startLive(t); }, 15000);
+  }
+}
+
+let remoteTimer;
+function refreshAfterRemote(t) {
+  clearTimeout(remoteTimer);
+  remoteTimer = setTimeout(() => {
+    if (UI.trip === t) { renderTitle(); if (!$('#filters').hidden) renderChips(); renderTab(); }
+    else if (!$('#home').hidden) renderHome();
+  }, 200);
+}
+
+const LIVE_LBL = {connecting:'○ Sync…', live:'● Live', offline:'○ Offline', error:'⚠ Sync'};
+function renderLive() {
+  const s = liveStatus(UI.trip), dot = $('#liveDot');
+  dot.hidden = s === 'off';
+  dot.dataset.s = s;
+  dot.innerHTML = `<span>${LIVE_LBL[s] || ''}</span>`;
+  dot.setAttribute('aria-label', 'Live sync: ' + ({connecting:'connecting', live:'on', offline:'offline, will sync when back online', error:'not working'}[s] || 'off'));
+  const el = $('#liveState');
+  if (el) el.innerHTML = {
+    connecting:'Connecting…',
+    live:'<b class="ok-txt">● Live.</b> Your ticks reach the other phone within seconds.',
+    offline:'<b>○ Offline.</b> Ticks are saved here and sent when you’re back online.',
+    error:'<b class="crit-txt">⚠ Sync isn’t working.</b> The invite link may be wrong. Turn live sync off and join again.'}[s] || '';
+}
+
+function attachLive(t, key) {
+  t.live = key;
+  persist();
+  startLive(t);
+  toast(`Live sync is on for “${t.name}”`);
+}
+function attachPendingLive(t) {
+  const j = pendingLive;
+  pendingLive = null;
+  if (!j || !(j.u === t.uid || sameName(j.n, t.name))) return false;
+  attachLive(t, j.key);
+  return true;
+}
+
+// Returns an error message, or null once a sheet is showing.
+async function joinLive(j) {
+  if (!validKey(j.key)) return 'That live sync link doesn’t look right.';
+  const t = getTrip(j.u) || DB.trips.find(x => sameName(x.name, j.n));
+  if (!t) {
+    if (!j.slug) return `This phone doesn’t have “${j.n || 'that list'}” yet. Open the list’s share link first, then this live sync link again.`;
+    pendingLive = j;
+    return loadList(j.slug);
+  }
+  openSheet('Join live sync', `<p>Turn on live sync for <b>${h(t.name)}</b>?</p>
+    <p>Ticks on this phone and the other phone are merged now (the newest change for each item wins), then stay in step within seconds while the app is open.</p>
+    ${t.live && t.live !== j.key ? '<p class="note warnish">This replaces the live sync this trip already has on this phone.</p>' : ''}
+    <button class="btn primary block" id="jGo">Turn on live sync</button>
+    <button class="btn block" data-act="closesheet">Cancel</button>`, () => {
+    $('#jGo').onclick = () => {
+      attachLive(t, j.key);
+      closeSheet();
+      if (UI.trip === t) renderTab(); else openTrip(t.uid);
+    };
+  });
+  return null;
+}
+
+window.addEventListener('online', liveAll);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') liveAll();
+  else Object.keys(LIVE).forEach(stopLive);
+});
+
 /* ---------- Toast & theme ---------- */
 let toastTimer;
 function toast(msg, label, fn, ms = 2600) {
@@ -1372,6 +1545,30 @@ const ACT = {
     persist(); applyTheme();
     toast({system:'Theme: follow phone', light:'Theme: light', dark:'Theme: dark'}[DB.settings.theme]);
   },
+  startlive() {
+    const t = UI.trip;
+    attachLive(t, b64u(crypto.getRandomValues(new Uint8Array(18))));
+    renderMore();
+  },
+  async mkjoin(b) {
+    const t = UI.trip;
+    b.disabled = true;
+    const short = await findShortLink(t);
+    b.disabled = false;
+    const slug = short ? short.split('?list=')[1] : '';
+    const url = baseURL() + '?' + (slug ? `list=${slug}&` : '') + `live=${t.live}&u=${encodeURIComponent(t.uid)}&n=${encodeURIComponent(t.name)}`;
+    showOut('#lvOut', url, `${t.name} live sync`, `Join live ticking for our ${t.name} list: open this link, or paste it into Holiday Lists (home screen › Paste a shared link or code).`);
+    $('#lvOut').insertAdjacentHTML('beforeend', '<p class="small">Anyone with this link can see and change this trip’s ticks, so only send it to family.</p>');
+  },
+  stoplive() {
+    const t = UI.trip;
+    if (!confirm(`Turn off live sync for “${t.name}” on this phone?
+
+Your ticks stay on this phone. Other phones keep syncing with each other.`)) return;
+    stopLive(t.uid);
+    t.live = null;
+    persist(); renderMore(); renderLive();
+  },
   settheme(b) { DB.settings.theme = b.dataset.v; persist(); applyTheme(); renderMore(); },
   fdone: focusDone, fskip: focusSkip, fback: focusBack,
   frestart() { UI.focus.key = ''; renderFocus(); },
@@ -1411,17 +1608,18 @@ const ACT = {
     if (!confirm(`Untick all ${countPacked(t)} packed items in “${t.name}”?\n\nIf you later send your ticks, the other phone will be unticked too.`)) return;
     const now = Date.now();
     t.items.forEach(it => { if (isPacked(t, it.id)) t.state[it.id] = {p:0, t:now}; });
-    persist(); UI.focus.key = ''; renderTitle(); toast('Everything unticked');
+    persist(); liveResync(t); UI.focus.key = ''; renderTitle(); toast('Everything unticked');
   },
   restore() {
     const t = UI.trip;
     if (!confirm(`Restore “${t.name}” to its original list?\n\nThis removes your added/edited items and clears all ticks on this phone.`)) return;
     Object.assign(t, originalOf(t));
-    persist(); UI.open.clear(); UI.focus.key = ''; renderTitle(); toast('Original list restored');
+    persist(); liveResync(t); UI.open.clear(); UI.focus.key = ''; renderTitle(); toast('Original list restored');
   },
   deltrip() {
     const t = UI.trip;
     if (!confirm(`Delete “${t.name}” from this phone?\n\nThis can’t be undone. Other phones keep their copies.`)) return;
+    stopLive(t.uid);
     DB.trips.splice(DB.trips.indexOf(t), 1);
     persist(); showHome(); toast(`Deleted “${t.name}”`);
   }
@@ -1498,11 +1696,15 @@ function setupPWA() {
 applyTheme();
 setupPWA();
 const bootHash = location.hash;
-const bootList = new URLSearchParams(location.search).get('list');
+const bootQ = new URLSearchParams(location.search);
+const bootList = bootQ.get('list');
+const bootLive = bootQ.get('live');
 history.replaceState({v:'home'}, '', location.pathname);
 const last = DB.settings.last;
 if (last && getTrip(last.uid)) openTrip(last.uid, {tab:last.tab}); else showHome();
-if (bootList) loadList(bootList.toLowerCase()).then(err => { if (err) toast(err, null, null, 6000); });
+liveAll();
+if (bootLive) joinLive({key:bootLive, u:bootQ.get('u') || '', n:bootQ.get('n') || '', slug:(bootList || '').toLowerCase()}).then(err => { if (err) toast(err, null, null, 7000); });
+else if (bootList) loadList(bootList.toLowerCase()).then(err => { if (err) toast(err, null, null, 6000); });
 else if (bootHash.startsWith('#t=') || bootHash.startsWith('#s=')) {
   readCode(bootHash).then(r => {
     if (!r) return toast('That link couldn’t be read. Ask for it to be sent again.', null, null, 6000);

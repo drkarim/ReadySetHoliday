@@ -50,6 +50,43 @@ A packing and shopping checklist app for phones. It works offline, and the Barba
 2. Tap **⋮ → Add to Home screen** (it may say **Install app**), then **Install**.
 3. Open it once while online, and it works offline after that.
 
+## Live sync (ticks update on both phones within seconds)
+
+Live sync uses the free Firebase Realtime Database in project `readysetholiday-fcf4b` (Spark plan, so there's no card on file and no charges).
+
+**Turn it on:**
+1. On one phone, open the trip and tap **More → Live sync → Start live sync**. The header shows **● Live**.
+2. Tap **Invite another phone**, then **Share…**, and send the link to the other phone.
+3. On the other phone, open the link (or paste it into **Paste a shared link or code** in the Home Screen app) and tap **Turn on live sync**. Both phones' ticks are merged, with the newest change for each item winning.
+
+**How it behaves:**
+- **Ticks:** they show on the other phone within about a second while the app is open there. When the app opens, it catches up on anything it missed.
+- **No signal:** ticks are kept on the phone (the header shows **○ Offline**) and sent when you're back online.
+- **What syncs:** only ticks. Added, edited or deleted items still go through **Share this list**.
+- **Who can see it:** anyone with the invite link can see and change that trip's ticks, so only send it to family. The database rules block everything that isn't addressed by a trip's random key.
+
+**Database rules** (Firebase console → Realtime Database → Rules):
+```json
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "rooms": {
+      "$room": {
+        ".read": "$room.matches(/^[A-Za-z0-9_-]{24,64}$/)",
+        ".write": "$room.matches(/^[A-Za-z0-9_-]{24,64}$/)",
+        "ticks": {
+          "$id": {
+            ".validate": "newData.hasChildren(['p', 't']) && newData.child('p').isNumber() && newData.child('t').isNumber()"
+          }
+        },
+        "$other": { ".validate": false }
+      }
+    }
+  }
+}
+```
+
 ## Short share links (`?list=name`)
 
 Live app: **https://drkarim.github.io/ReadySetHoliday/**
