@@ -50,6 +50,28 @@ A packing and shopping checklist app for phones. It works offline, and the Barba
 2. Tap **⋮ → Add to Home screen** (it may say **Install app**), then **Install**.
 3. Open it once while online, and it works offline after that.
 
+## Short share links (`?list=name`)
+
+Live app: **https://drkarim.github.io/ReadySetHoliday/**
+
+A list saved in this repo's `lists` folder gets a short link:
+
+`https://drkarim.github.io/ReadySetHoliday/?list=barbados`
+
+Opening the link shows "Add this list to your phone?". You can also paste the link into **Paste a shared link or code** in the app. The **Share** button in the app gives the short link when one exists, and the long link otherwise.
+
+**To publish a new list:**
+1. In the app, open the trip and tap **More → Download this list as CSV**. The file is named after the trip, for example `lisbon-2027.csv`.
+2. On GitHub, open the repo's **lists** folder, choose **Add file → Upload files**, add the CSV without renaming it, and commit.
+3. Wait 1–2 minutes. The link is `…/ReadySetHoliday/?list=lisbon-2027`.
+4. Optional: add an entry to `lists/lists.json` to show trip details and dates:
+   ```json
+   "lisbon-2027": { "name": "Lisbon", "sub": "LGW → LIS · 5 nights", "start": "2027-04-02", "end": "2027-04-07" }
+   ```
+   Without an entry, the trip name comes from the file name.
+
+Short links only hold the published list, not anyone's ticks. Use **Send my ticks** to share progress. To change a published list, upload the edited CSV again. People who already have the list tap the link again and choose **Update my copy**, which keeps their ticks.
+
 ## Using a CSV for another holiday
 
 On the home screen, tap **＋ New trip → Upload a CSV file**. Use the same columns as the Barbados file:

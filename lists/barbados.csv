@@ -1,0 +1,129 @@
+id,category,item,qty,source,criticality,why_critical,notes,packed,sort_order
+1,Documents & money,Passports (British) x4,4,Have at home,Critical,Can't travel or enter without valid passports,Must be valid for the whole stay (GOV.UK). Keep in hand luggage. Check Amani's and Zidan's expiry dates too.,no,1
+2,Documents & money,Online Barbados Immigration & Customs form (travelform.gov.bb),1 per traveller,Need to buy,Critical,Compulsory to enter; opens 72h before arrival,"Compulsory. Opens 72h before arrival. Needs flight info, passports and an email. Save/print the receipts. On standby, update the flight details if you end up on a different flight.",no,2
+3,Documents & money,Return/onward ticket evidence (VS132 Fri 30 Oct 22:25),1,Have at home,Critical,Visitors must show an onward/return ticket,Visitors must show an onward/return ticket. Have the booking/ticket record on your phone.,no,3
+4,Documents & money,"Accommodation address + booking confirmation (Allure 503, Brighton Beach, St Michael)",1,Have at home,Critical,Immigration asks for the full accommodation address,Immigration asks for the full address of your accommodation. Screenshot the booking.,no,4
+5,Documents & money,Travel insurance policy details + emergency number,1,Need to buy,Critical,Healthcare is costly; clinics may want prepayment,GOV.UK warns Barbados healthcare is costly and private clinics may want prepayment. Standby travel does not replace insurance.,no,5
+6,Documents & money,Monzo Max card + backup card,2,Have at home,Critical,Main way to pay and get cash,"Choose BBD, not GBP, if an ATM or terminal asks. Check the Monzo overseas cash allowance first.",no,6
+7,Documents & money,Copy of prescriptions / doctor's letter,1 set,Need to buy,Critical,Customs/medical proof for all medicines,See Medicines section. Keep digital + paper copies.,no,7
+8,Documents & money,Monzo QR code / digital wallet set up on phone,1,Have at home,Important,,,no,8
+9,Documents & money,Some US$ cash / BDS$ small notes,~US$150,Need to buy,Important,,"US$ accepted island-wide (US$1 = BDS$2). Handy for the US$200 Allure deposit, if cash is wanted, and for buses/beach vendors. Declare cash over BDS$10,000.",no,9
+10,Documents & money,Driving licence (+ DVLA share code if hiring a car),1,Have at home,Important,,"Only if hiring a car: visitors normally need a local visitor's driving permit, usually issued by the hire firm. UNVERIFIED, check with the hire company.",no,10
+11,Documents & money,Wise card (backup),1,Have at home,Nice to have,,"From the 2023/2025 Dhaka lists (""take wise card""). Optional second card.",no,11
+12,Electronics,"UK to Barbados plug adapter (Type A/B, 2 flat pins) x4",4,Need to buy,Critical,Barbados uses Type A/B sockets; UK plugs won't fit,Barbados uses Type A/B sockets. Take one per person plus a multi-USB charger so you need fewer adapters. Check at Allure whether any sockets are UK-style (unlikely).,no,1
+13,Electronics,Phone chargers + cables (USB-C) x4,4,Have at home,Critical,Phones need charging; must be 100-240V,Check each charger says 100-240V.,no,2
+14,Electronics,Powerbank (in HAND luggage only),2,Have at home,Critical,Lithium batteries allowed in cabin bag only (airline safety),"Lithium batteries must go in cabin baggage, not hold luggage. Keep under 100Wh/ 27,000mAh.",no,3
+15,Electronics,Hairdryer / straighteners,0,Provided - check with host,Critical,UK 230V hair tools can be damaged or unsafe on 115V,"DO NOT bring UK 230V hair tools. Allure 503 lists a hair dryer. If you need straighteners, bring dual-voltage ones only.",no,4
+16,Electronics,Multi-USB charging socket / block (100-240V),1,Have at home,Important,,Plug it into one adapter and charge everything from it.,no,5
+17,Electronics,Charging cable in cabin bag for the flight,1,Have at home,Important,,From your 'Remember to' list: charging cable for flight.,no,6
+18,Electronics,Galaxy fast charger,1,Have at home,Nice to have,,Marked 100-240V on most models.,no,7
+19,Electronics,Watch charger (G-Shock/Galaxy watch),1,Have at home,Nice to have,,,no,8
+20,Electronics,Fitbit charger,1,Have at home,Nice to have,,,no,9
+21,Electronics,Kindle Scribe x3 + chargers,3,Have at home,Nice to have,,Reused (Dhaka took 3). Take as many as you need.,no,10
+22,Electronics,Tablets / iPads for kids + chargers,2,Have at home,Nice to have,,For the flight and evenings. Download films/games before you leave.,no,11
+23,Electronics,Headphones: Bose,1,Have at home,Nice to have,,,no,12
+24,Electronics,Headphones: Amani's,1,Have at home,Nice to have,,,no,13
+25,Electronics,Small Bluetooth speaker,1,Have at home,Nice to have,,Good for the balcony. Keep the volume considerate in a shared building.,no,14
+26,Electronics,Camera / action cam + SD card (GoPro for snorkelling?),1,Have at home,Nice to have,,Optional but nice for snorkelling. Lithium batteries in cabin bag.,no,15
+27,Electronics,Waterproof phone pouches,4,Need to buy,Nice to have,,"Cheap, useful for beach/snorkel photos.",no,16
+28,Electronics,Galaxy SmartTag in each suitcase,2-3,Have at home,Nice to have,,Handy if a bag is delayed on a standby trip.,no,17
+29,Electronics,Toothbrush charger / floss charger (check voltage),2,Have at home,Nice to have,,"Some dental chargers are 230V only. Check the label, otherwise use a manual toothbrush.",no,18
+30,Electronics,Beard trimmer / head razor / moustache trimmer (USB or 100-240V),1-2,Have at home,Nice to have,,Cordless USB-charge models are fine. A 230V-only mains shaver will not work safely on 115V.,no,19
+31,Clothing,T-shirts / light tops (adults),6,Have at home,Important,,"Hot and humid, ~30°C. Cotton or quick-dry.",no,1
+32,Clothing,Shorts (adults and kids),6,Have at home,Important,,"CHECK none are camouflage print. Camouflage clothing is illegal for everyone, including children.",no,2
+33,Clothing,"Dresses / tunics / modest beachwear (Tasmia, Amani)",6,Have at home,Important,,"Modest options, if preferred, for public beaches and town.",no,3
+34,Clothing,Zidan outfits (11 yrs),6,Have at home,Important,,Plus a spare outfit for the flight.,no,4
+35,Clothing,Underwear,8 each,Have at home,Important,,Pack extra. Humidity and swimming mean more changes. Allure has a washer/dryer.,no,5
+36,Clothing,Pyjamas,4 sets,Have at home,Important,,"A/C inside, so light pyjamas.",no,6
+37,Clothing,Light cardigan / hoodie for plane and A/C,4,Have at home,Important,,Flights are cold; the apartment A/C can be cool.,no,7
+38,Clothing,Lightweight rain jackets,4,Need to buy,Important,,"Late Oct is the tail end of the wet season. Short, heavy showers are likely.",no,8
+39,Clothing,Flip-flops / sandals,4 pairs,Have at home,Important,,,no,9
+40,Clothing,Comfortable walking shoes / trainers,4 pairs,Have at home,Important,,Wear the bulkiest on the plane.,no,10
+41,Clothing,Sun hats / caps,4,Have at home,Important,,,no,11
+42,Clothing,Sunglasses (UV400),4,Have at home,Important,,Pack in cabin bag.,no,12
+43,Clothing,Light trousers / linen for evenings,3,Have at home,Nice to have,,For restaurants and cooler evenings.,no,13
+44,Clothing,Kurta / Punjabi for Jummah or evening (if wanted),2,Have at home,Nice to have,,Optional. Light cotton is good in humid weather.,no,14
+45,Clothing,Socks,4 pairs each,Have at home,Nice to have,,Mostly for flights and tennis.,no,15
+46,Clothing,Laundry bag,1,Need to buy,Nice to have,,"Cheap, packable. There is a washer/dryer in the unit.",no,16
+47,Swim & beach,Swimwear (adults),2 each,Have at home,Important,,CHECK no camouflage print.,no,1
+48,Swim & beach,Swimwear (kids),2 each,Have at home,Important,,Amani and Zidan. Reused from Dhaka list 'Amani and Zidan swim gear'.,no,2
+49,Swim & beach,Snorkel set: Zidan (11) - kids size mask + snorkel + fins,1,Need to buy,Important,,"Choose a kids' mask (silicone skirt, tempered glass). Fins are bulky; consider adjustable ones.",no,3
+50,Swim & beach,Snorkel set: Amani (17) - adult S/M,1,Need to buy,Important,,Adult small mask fits most 17-year-olds. Try on at home before you pack: hold it to your face without the strap and breathe in.,no,4
+51,Swim & beach,Reef-safe sun cream SPF50 (mineral),2-3 bottles,Need to buy,Important,,"Reef-safe protects the reefs. Sun cream is easy to buy but expensive on the island, so buy before you fly. Total liquids must follow cabin 100ml rules, so pack in hold.",no,5
+52,Swim & beach,Beach towels (quick-dry),4,Provided - check with host,Important,,Allure says to use 'beach towels' (stated for unit 401). For 503 this is unconfirmed: CHECK WITH HOST. Pack quick-dry travel towels if not provided.,no,6
+53,Swim & beach,"Snorkel sets: adults (Rashed, Tasmia) - optional",2,Need to buy,Nice to have,,Optional. Hiring locally is another option; sets are widely available on the west coast.,no,7
+54,Swim & beach,Swim goggles,4,Have at home,Nice to have,,,no,8
+55,Swim & beach,Rash vests / UV swim tops (kids),2 each,Need to buy,Nice to have,,UPF 50+. Good for long snorkel sessions in strong sun.,no,9
+56,Swim & beach,Water shoes / reef shoes,4,Need to buy,Nice to have,,Useful for rocky or coral-sand entries.,no,10
+57,Swim & beach,Beach bag / dry bag,1,Need to buy,Nice to have,,A dry bag keeps phones and keys safe.,no,11
+58,Swim & beach,Beach loungers / chairs,,Provided - check with host,Nice to have,,Allure advertises complimentary beach loungers and a beach shower.,no,12
+59,Swim & beach,Waterproof sports watch (G-Shock),1,Have at home,Nice to have,,,no,13
+60,Toiletries & health,Contact lenses + solution + glasses,As needed,Have at home,Critical,Can't see without lenses/glasses,Bring a spare pair of glasses.,no,1
+61,Toiletries & health,Insect repellent (DEET or icaridin),2,Need to buy,Critical,"Dengue, Zika and chikungunya risks listed by GOV.UK","Dengue, Zika and chikungunya are all listed health risks by GOV.UK. Use at dawn and dusk. Apply sun cream first.",no,2
+62,Toiletries & health,Allopurinol (Rashed) - 5+ days supply (+ spare),Full pack,Have at home,Critical,Rashed's daily medicine; must travel in labelled box,"Carry in cabin bag in the original labelled box, with a copy of the prescription. Allopurinol is not a controlled drug, so it is normally fine, but declare medicines on the form if asked. Bring extra in case of delay.",no,3
+63,Toiletries & health,Regular prescription medicines (all family),As needed,Have at home,Critical,Family prescriptions; controlled drugs need paperwork,"Original packaging with the pharmacy label. Controlled drugs (e.g. strong painkillers, ADHD meds) need extra paperwork. See 'Customs & rules' tab.",no,4
+64,Toiletries & health,Toothbrushes + toothpaste,4,Have at home,Important,,,no,5
+65,Toiletries & health,Amani - extra braces / dental items,1 set,Have at home,Important,,Reused from Dhaka list ('Amani extra braces dental'). Bring wax and spare elastics.,no,6
+66,Toiletries & health,"Basic toiletries (shampoo, body wash, soap)",,Provided - check with host,Important,,Rashed says basic toiletries are provided. Allure's 401 listing shows soap and shampoo. CHECK with host. Bring your own conditioner or specifics.,no,7
+67,Toiletries & health,Deodorant (non-aerosol if possible),4,Have at home,Important,,Aerosol sizes are limited in hand luggage.,no,8
+68,Toiletries & health,"Sanitary products (Tasmia, Amani)",As needed,Have at home,Important,,Pack extra. Prices are higher locally.,no,9
+69,Toiletries & health,Sun cream SPF50 (face and body),2 bottles,Need to buy,Important,,UK SPF50 with UVA is plenty. Reapply after swimming.,no,10
+70,Toiletries & health,Paracetamol / ibuprofen (adult and child),2 packs,Have at home,Important,,Calpol/ibuprofen for Zidan.,no,11
+71,Toiletries & health,Antihistamines + hydrocortisone cream,1 each,Have at home,Important,,For bites and stings.,no,12
+72,Toiletries & health,Motion sickness tablets (kids and Tasmia),1,Have at home,Important,,For the plane and boat or catamaran trips.,no,13
+73,Toiletries & health,Dental floss,1,Have at home,Nice to have,,,no,14
+74,Toiletries & health,Corsodyl / mouthwash (travel size),1,Have at home,Nice to have,,Over 100ml needs to go in the hold.,no,15
+75,Toiletries & health,"Conditioner, hair oil, hair products",As needed,Have at home,Nice to have,,Humidity makes hair frizzy. Bring what you use.,no,16
+76,Toiletries & health,"Razor, blades, shaving gel",1 set,Have at home,Nice to have,,,no,17
+77,Toiletries & health,Beard colour,1,Have at home,Nice to have,,,no,18
+78,Toiletries & health,Face cream (Body Shop),1,Have at home,Nice to have,,,no,19
+79,Toiletries & health,After-sun / aloe vera gel,2,Need to buy,Nice to have,,Aloe gel is also sold locally.,no,20
+80,Toiletries & health,Hand sanitiser / antibacterial wipes,2,Have at home,Nice to have,,,no,21
+81,Toiletries & health,Rehydration sachets,8,Have at home,Nice to have,,Heat plus new food. Reused: effervescent energy tablets.,no,22
+82,Toiletries & health,Electrolyte / energy effervescent tablets,1 tube,Have at home,Nice to have,,,no,23
+83,Toiletries & health,Gaviscon tablets,1,Have at home,Nice to have,,,no,24
+84,Toiletries & health,Plasters / blister plasters / finger bandage,1 set,Have at home,Nice to have,,,no,25
+85,Toiletries & health,Omega 3 / Centrum / magnesium sleep tablets,1 pack each,Have at home,Nice to have,,"Supplements are personal effects, but keep them in labelled packaging.",no,26
+86,Toiletries & health,Nicotine pouches / vape (only if used),As needed,Have at home,Nice to have,,From the Dhaka list. Vapes are NOT part of the duty-free allowance and may be dutiable. No clear official rule on nicotine pouches. Declare if in doubt. Consider whether to take them at all.,no,27
+87,Kitchen & food,Halal meat: DO NOT bring from UK,0,Need to buy,Critical,Meat/poultry needs a permit; UK poultry banned; confiscated,"UK poultry cannot be imported and permits are needed for all meat, dairy and eggs (25 lb max). Buy locally. See 'Halal & groceries' notes below.",no,1
+88,Kitchen & food,"Halal chicken (Amir's Fresh Halal Chicken, local)",As needed,Need to buy,Critical,Halal food needed and UK meat can't be brought,Local halal-certified chicken (Fasons Foods) supplied to supermarkets. Phone 246-428-2647 to ask which supermarkets near Brighton Beach stock it.,no,2
+89,Kitchen & food,Ghee / milk powder / cheese from UK,0,Have at home,Critical,Dairy needs a permit; confiscated if undeclared,Dairy is an animal-origin product and needs a permit and approved-country rules. Leave at home.,no,3
+90,Kitchen & food,"Fully equipped kitchen: cookware, crockery, cutlery, toaster, microwave, oven, dishwasher, fridge, coffee/tea maker",,Provided - check with host,Important,,Listed by the Allure unit agents. For 503 the exact list of pans/knives/spice shelves is unconfirmed: CHECK WITH HOST.,no,4
+91,Kitchen & food,"Washing-up liquid, sponge, dishwasher tablets, bin bags",,Provided - check with host,Important,,"Often only a small starter amount. CHECK, and buy locally on day 1.",no,5
+92,Kitchen & food,Reusable water bottles (insulated),4,Have at home,Important,,Tap water is safe to drink in Barbados (Visit Barbados). Bring empty bottles through security.,no,6
+93,Kitchen & food,"Dried spices and masalas (sealed, commercial packs)",Small packs,Have at home,Important,,"Processed/dried spices in sealed commercial packs are normally ok. Declare any fresh, whole-seed or unprocessed plant products, as these must be inspected by Plant Quarantine. UNVERIFIED for spices; if in doubt, declare.",no,7
+94,Kitchen & food,"Shelf-stable snacks for the flight and kids (crisps, cereal bars, nuts)",Plenty,Have at home,Important,,Avoid anything with meat or dairy filling. Eat or bin leftover fruit before landing: fresh fruit/veg must be declared.,no,8
+95,Kitchen & food,"Fish and seafood (halal-friendly, buy fresh)",As needed,Need to buy,Important,,Fresh fish is sold by local vendors and supermarkets (exact fish markets not verified). Easy halal-friendly option for most families.,no,9
+96,Kitchen & food,"Eggs, vegetables, fruit, dairy",As needed,Need to buy,Important,,"Buy locally. Vegetable markets, e.g. Cheapside and Barven (6-13 minutes from the apartment per one listing).",no,10
+97,Kitchen & food,Prayer mat + qibla compass app + small Quran,4 mats,Have at home,Important,,Use a qibla app on arrival to set the direction.,no,11
+98,Kitchen & food,"Kitchen roll, cling film, tin foil, zip bags",1 each,Need to buy,Nice to have,,"Buy in a Barbados supermarket (A1, Massy, etc.) to save luggage.",no,12
+99,Kitchen & food,Small cool bag + ice packs,1,Need to buy,Nice to have,,For beach days and drinks. Pack flat in the suitcase.,no,13
+100,Kitchen & food,Tea bags / favourite tea,1 box,Have at home,Nice to have,,"Tea is a processed plant product, normally fine. Declare if in doubt. 'Unprocessed' plant products must be declared.",no,14
+101,Kitchen & food,Coffee: AeroPress + filters + plunger seal,1,Have at home,Nice to have,,Reused (coffee aeropress + replacement plunger).,no,15
+102,Kitchen & food,Ground coffee / favourite coffee,1 bag,Have at home,Nice to have,,"Roasted coffee is processed, normally fine.",no,16
+103,Kitchen & food,Curry paste / sauces in jars (vegetarian only),2-3,Have at home,Nice to have,,Check labels: sauces containing meat or dairy count as animal products and need a permit. Veg-only is safer.,no,17
+104,Kitchen & food,Tupperware / lunch boxes,2,Have at home,Nice to have,,For packed beach lunches.,no,18
+105,Flight & cabin bag,Medicines in cabin bag (never in hold),All,Have at home,Critical,Medicines must be in cabin bag with labels,Original packaging with labels and prescription copies.,no,1
+106,Flight & cabin bag,Cabin bag packing: 1 change of clothes each,4 sets,Have at home,Important,,Standby can mean delays or an overnight. Pack as if the hold bag could be late.,no,2
+107,Flight & cabin bag,Swimwear + sun cream in cabin bag (24h essentials),1 set,Have at home,Important,,So you can start the holiday even if checked bags are delayed.,no,3
+108,Flight & cabin bag,Spare phone SIM / eSIM (Barbados roaming),1,Have at home,Important,,"Check UK network roaming charges, or buy a local eSIM. Visit Barbados recommends activating roaming before arrival.",no,4
+109,Flight & cabin bag,Travel pillows / eye masks / ear plugs,4,Have at home,Nice to have,,,no,5
+110,Tennis,Tennis shoes,2 pairs,Have at home,Nice to have,,Wear them on the plane to save space.,no,1
+111,Tennis,Tennis rackets x2 (Rashed + one for Amani/Zidan),2,Have at home,Nice to have,,Fine in the hold; pack in the racket bag with clothes for padding. Not a customs issue.,no,2
+112,Tennis,Tennis balls (sealed can),1-2 cans,Have at home,Nice to have,,Some kit is sold locally but pricey. Barbados National Tennis Centre (Wildey): BD$25/hr visitors.,no,3
+113,Tennis,Tennis bag,1,Have at home,Nice to have,,,no,4
+114,Tennis,"Tennis caps, wrist strap, grips",1 set,Have at home,Nice to have,,,no,5
+115,Tennis,Hamstring strap / exercise bands,1,Have at home,Nice to have,,"Reused (hamstring strap, exercise bands). Small.",no,6
+116,Miscellaneous,"Camouflage check: NO camo clothing, hats or bags",,Have at home,Critical,"Camouflage is illegal to wear or carry, even for kids","Illegal to wear or carry camouflage items, including children (GOV.UK, Visit Barbados, Canada). Check kids' shorts, caps and backpacks.",no,1
+117,Miscellaneous,Small day backpack (beach/town),2,Have at home,Nice to have,,,no,2
+118,Miscellaneous,Umbrella (compact),2,Have at home,Nice to have,,"Short, sharp showers likely in late Oct.",no,3
+119,Miscellaneous,Zip bags / dry bags for phones,6,Need to buy,Nice to have,,Useful in the rain and at the beach.,no,4
+120,Miscellaneous,Spare empty foldable bag for the return,1,Have at home,Nice to have,,Souvenirs and wet items.,no,5
+121,Before leaving home,Fill in the Barbados Immigration & Customs form (Sat/Sun before the flight),4,Need to buy,Critical,Compulsory online form; must be done before flying,"The form is only available 72h before arrival, so do it once it opens (flight info needed).",no,1
+122,Before leaving home,Check weather and hurricane updates before departure,1,Have at home,Critical,Safety: hurricane season runs to 30 Nov,Barbados Met Service / NHC. Hurricane season runs to 30 Nov.,no,2
+123,Before leaving home,Turn off water at stopcock / cork,1,Have at home,Important,,,no,3
+124,Before leaving home,Heating setting: set for an empty house,1,Have at home,Important,,,no,4
+125,Before leaving home,Turn off TV and main TV switch,1,Have at home,Nice to have,,,no,5
+126,Before leaving home,Turn off Philips Hue / smart devices,1,Have at home,Nice to have,,,no,6
+127,Before leaving home,Garden water: check automatic watering,1,Have at home,Nice to have,,,no,7
+128,Before leaving home,"Car at Heathrow/airport: take off battery if parking at home, or book parking",1,Have at home,Nice to have,,From your 2025 list ('take off car battery'). Not needed if the car stays in use.,no,8

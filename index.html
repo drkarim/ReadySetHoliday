@@ -443,6 +443,8 @@ const srcOf = it => SRC.find(s => s.k === it.source) || {k:it.source, ab:'OTHER'
 const isWarn = it => WARN_RE.test(it.notes) && !/not a customs issue/i.test(it.notes);
 const rich = s => h(s).replace(/\bUNVERIFIED\b/g, '<mark>UNVERIFIED</mark>');
 const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+const slugify = s => clean(s).toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'list';
+const sameName = (a, b) => clean(a).toLowerCase() === clean(b).toLowerCase();
 
 function matchOpt(v, opts) {
   v = clean(v).toLowerCase();
@@ -891,9 +893,8 @@ function renderMore() {
   const t = UI.trip;
   $('#tab-more').innerHTML = `
   <section class="card"><h2>Share this list</h2>
-    <p>Creates a link that holds the whole list. Anyone who opens it can add their own copy. No account needed.</p>
+    <p>Creates a link someone can open to add this list to their phone. No account needed.</p>
     ${hosted() ? '' : '<p class="note warnish">You’re opening the app from a file on this device. Put it online first (see the guide) so links open on other phones.</p>'}
-    <label class="check"><input type="checkbox" id="shTicks" checked> Include my ticks</label>
     <button class="btn primary block" data-act="mkshare">Create share link</button>
     <div id="shOut"></div>
   </section>
@@ -928,7 +929,7 @@ function renderMore() {
 
 function showOut(sel, text, title, msg) {
   const box = $(sel);
-  box.innerHTML = `<textarea readonly class="out" rows="4" aria-label="${h(title)}">${h(text)}</textarea>
+  box.innerHTML = `<textarea readonly class="out" rows="${text.length > 160 ? 4 : 2}" aria-label="${h(title)}">${h(text)}</textarea>
     <div class="row2"><button class="btn" data-act="copyout">Copy</button>${navigator.share ? '<button class="btn primary" data-act="shareout">Share…</button>' : ''}</div>`;
   box._payload = {text, title, msg};
 }
@@ -988,7 +989,8 @@ async function statusPayload(t) {
 
 async function readCode(raw) {
   const s = clean(raw).replace(/\s+/g, '');
-  let m;
+  let m = s.match(/[?&]list=([a-z0-9-]+)/i);
+  if (m) return {kind:'list', slug:m[1].toLowerCase()};
   try {
     if ((m = s.match(/#t=([\w-]+)/))) {
       const d = await unpack(m[1]);
@@ -1023,12 +1025,52 @@ function diffStatus(t, d) {
   return {apply, on, off, missing, names};
 }
 
+/* Short links: lists published as lists/<slug>.csv next to the app, opened with ?list=<slug>.
+   lists/lists.json optionally adds trip details: {"<slug>": {"uid", "name", "sub", "start", "end"}}. */
+async function fetchListsIndex() {
+  try { const r = await fetch('lists/lists.json', {cache:'no-store'}); if (r.ok) return await r.json(); } catch (e) {}
+  return {};
+}
+
+async function findShortLink(t) {
+  if (!hosted()) return null;
+  const idx = await fetchListsIndex();
+  const slug = Object.keys(idx).find(k => idx[k] && idx[k].uid === t.uid) || slugify(t.name);
+  try {
+    const r = await fetch('lists/' + slug + '.csv', {method:'HEAD', cache:'no-store'});
+    if (r.ok) return baseURL() + '?list=' + slug;
+  } catch (e) {}
+  return null;
+}
+
+// Returns an error message, or null once the "Add a shared list" sheet is showing.
+async function loadList(slug) {
+  if (!/^[a-z0-9-]{1,80}$/.test(slug)) return 'That list link doesn’t look right.';
+  let text;
+  try {
+    const r = await fetch('lists/' + slug + '.csv', {cache:'no-store'});
+    if (r.status === 404) return `No list called “${slug}” has been published yet.`;
+    if (!r.ok) throw new Error();
+    text = await r.text();
+  } catch (e) { return 'Couldn’t load that list. Check you have signal and try again.'; }
+  const res = rowsFromCSV(text);
+  if (res.error) return res.error;
+  const m = (await fetchListsIndex())[slug] || {};
+  const name = m.name || slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  const tmp = newTrip({uid: m.uid || 'list-' + slug, name, sub: m.sub, start: m.start, end: m.end}, res.rows, false);
+  if (!tmp.items.length) return 'That list has no items.';
+  const d = tripPayload(tmp, false);
+  d.d = '';
+  importTripSheet(d);
+  return null;
+}
+
 function importTripSheet(d) {
-  const exists = getTrip(d.u), ticks = d.s ? Object.values(d.s).filter(v => v[0]).length : 0;
+  const exists = getTrip(d.u) || DB.trips.find(t => sameName(t.name, d.n)), ticks = d.s ? Object.values(d.s).filter(v => v[0]).length : 0;
   openSheet('Add a shared list', `
     <p><b>${h(d.n)}</b>${d.sub ? ' · ' + h(d.sub) : ''}<br>${plural(d.i.length, 'item')} in ${plural(d.c.length, 'category').replace('categorys', 'categories')}${d.s ? ` · ${plural(ticks, 'item')} ticked${d.d ? ' on ' + h(d.d) : ''}` : ''}.</p>
     ${exists ? `<p class="note">This list is already on this phone (“${h(exists.name)}”).</p>
-      <button class="btn primary block" id="tUpd">Update my copy and merge ticks</button>
+      <button class="btn primary block" id="tUpd">${d.s ? 'Update my copy and merge ticks' : 'Update my copy (keeps my ticks)'}</button>
       <button class="btn block" id="tCopy">Add as a separate copy</button>`
     : '<button class="btn primary block" id="tAdd">Add to this phone</button>'}
     <button class="btn block" data-act="closesheet">Cancel</button>`, () => {
@@ -1044,6 +1086,7 @@ function importTripSheet(d) {
     if ($('#tUpd')) $('#tUpd').onclick = () => {
       const inc = tripFromPayload(d);
       exists.items = inc.items;
+      exists.uid = d.u;
       Object.assign(exists, {name:inc.name, sub:inc.sub, start:inc.start, end:inc.end});
       let n = 0;
       for (const [id, v] of Object.entries(inc.state)) {
@@ -1051,14 +1094,14 @@ function importTripSheet(d) {
         if (!cur || v.t > cur.t) { exists.state[id] = v; n++; }
       }
       persist(); closeSheet();
-      toast(`Updated “${exists.name}” · ${plural(n, 'tick')} merged`);
+      toast(d.s ? `Updated “${exists.name}” · ${plural(n, 'tick')} merged` : `Updated “${exists.name}”`);
       if (UI.trip === exists) { resetFilters(); setTab(UI.tab); } else openTrip(exists.uid);
     };
   });
 }
 
 function statusSheet(d) {
-  let t = getTrip(d.u), other = false;
+  let t = getTrip(d.u) || DB.trips.find(x => sameName(x.name, d.n)), other = false;
   if (!t && UI.trip) { t = UI.trip; other = true; }
   if (!t) {
     openSheet('Import ticks', `<p>These ticks belong to “${h(d.n)}”, which isn’t on this phone yet. Ask for that list’s share link first.</p><button class="btn block" data-act="closesheet">OK</button>`);
@@ -1093,6 +1136,7 @@ function pasteSheet(title, intro) {
     $('#pGo').onclick = async () => {
       const r = await readCode($('#pTxt').value);
       if (!r) { $('#pMsg').textContent = 'That link or code couldn’t be read. Make sure you copied all of it.'; return; }
+      if (r.kind === 'list') { $('#pMsg').textContent = ''; const err = await loadList(r.slug); if (err) $('#pMsg').textContent = err; return; }
       r.kind === 'trip' ? importTripSheet(r.data) : statusSheet(r.data);
     };
   });
@@ -1138,7 +1182,7 @@ function download(name, text) {
   document.body.append(a); a.click();
   setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
 }
-const fileName = s => (s.replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '_') || 'list') + '.csv';
+const fileName = s => slugify(s) + '.csv';
 const TEMPLATE = COLS.join(',') + '\r\n' +
   '1,Documents,Passports,4,Have at home,Critical,Can\'t travel without them,Check expiry dates,no,1\r\n' +
   '2,Toiletries,Sun cream SPF50,2 bottles,Need to buy,Important,,,no,1\r\n';
@@ -1332,9 +1376,23 @@ const ACT = {
   fdone: focusDone, fskip: focusSkip, fback: focusBack,
   frestart() { UI.focus.key = ''; renderFocus(); },
   closesheet: closeSheet,
-  async mkshare() {
-    const t = UI.trip, url = baseURL() + '#t=' + await pack(tripPayload(t, $('#shTicks').checked));
+  async mkshare(b) {
+    const t = UI.trip;
+    b.disabled = true;
+    const short = await findShortLink(t);
+    b.disabled = false;
+    if (!short) {
+      await ACT.mklong();
+      $('#shOut').insertAdjacentHTML('beforeend', `<p class="small">Want a short link? Tap <i>Download this list as CSV</i> below and add the file, named <b>${h(fileName(t.name))}</b>, to the <b>lists</b> folder where this app is hosted (on GitHub: the repo’s lists folder).</p>`);
+      return;
+    }
+    showOut('#shOut', short, `${t.name} list`, `Our ${t.name} packing list. Open the link and tap “Add to this phone”.`);
+    $('#shOut').insertAdjacentHTML('beforeend', '<p class="small">Short link to the published copy of this list. It doesn’t carry ticks: use <i>Send my ticks</i> for those. <button class="link" data-act="mklong">Use the full link instead</button></p>');
+  },
+  async mklong() {
+    const t = UI.trip, url = baseURL() + '#t=' + await pack(tripPayload(t, true));
     showOut('#shOut', url, `${t.name} list`, `Our ${t.name} packing list. Open the link and tap “Add to this phone”.`);
+    $('#shOut').insertAdjacentHTML('beforeend', '<p class="small">Full link: your copy of the list, including edits and ticks, is stored inside the link itself.</p>');
   },
   async mkstatus() {
     const t = UI.trip, code = await statusPayload(t);
@@ -1440,10 +1498,12 @@ function setupPWA() {
 applyTheme();
 setupPWA();
 const bootHash = location.hash;
-history.replaceState({v:'home'}, '', location.pathname + location.search);
+const bootList = new URLSearchParams(location.search).get('list');
+history.replaceState({v:'home'}, '', location.pathname);
 const last = DB.settings.last;
 if (last && getTrip(last.uid)) openTrip(last.uid, {tab:last.tab}); else showHome();
-if (bootHash.startsWith('#t=') || bootHash.startsWith('#s=')) {
+if (bootList) loadList(bootList.toLowerCase()).then(err => { if (err) toast(err, null, null, 6000); });
+else if (bootHash.startsWith('#t=') || bootHash.startsWith('#s=')) {
   readCode(bootHash).then(r => {
     if (!r) return toast('That link couldn’t be read. Ask for it to be sent again.', null, null, 6000);
     r.kind === 'trip' ? importTripSheet(r.data) : statusSheet(r.data);

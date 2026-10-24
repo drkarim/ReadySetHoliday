@@ -1,6 +1,6 @@
 // Holiday Lists service worker: keeps the app available offline.
 // Serves the cached copy instantly and refreshes it in the background when online.
-const CACHE = 'holiday-lists-v1';
+const CACHE = 'holiday-lists-v2';
 const CORE = ['./', './index.html'];
 
 self.addEventListener('install', e => {
@@ -15,7 +15,16 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   const req = e.request;
-  if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
+  const url = new URL(req.url);
+  if (req.method !== 'GET' || url.origin !== location.origin) return;
+  // Published lists (short links): always try the network first so edits show up, fall back to the cache offline.
+  if (url.pathname.includes('/lists/')) {
+    e.respondWith(caches.open(CACHE).then(cache => fetch(req).then(res => {
+      if (res.ok) cache.put(req, res.clone());
+      return res;
+    }).catch(() => cache.match(req).then(hit => hit || Response.error()))));
+    return;
+  }
   e.respondWith(caches.open(CACHE).then(async cache => {
     const hit = await cache.match(req, { ignoreSearch: true }) ||
       (req.mode === 'navigate' ? await cache.match('./index.html') : undefined);
