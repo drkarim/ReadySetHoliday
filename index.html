@@ -1,0 +1,1455 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Holiday Lists</title>
+<meta name="description" content="Packing and shopping checklists for family holidays. Works offline.">
+<meta name="theme-color" content="#f6f7f9" id="themeColor">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Holiday">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b63c4'/%3E%3Cpath d='M18 33l9 9 19-20' stroke='white' stroke-width='7' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f6f7f9;--surface:#fff;--surface2:#eef1f5;--text:#111827;--muted:#525d6c;--border:#d5dbe3;
+  --accent:#0b63c4;--accent-ink:#fff;--accent-soft:#e4efff;
+  --c:#b42318;--c-bg:#fdebea;--i:#8a5200;--i-bg:#fff1d6;--n:#4b5563;--n-bg:#eceff3;
+  --ok:#0f7a55;--ok-bg:#dcf4e9;--warn-bg:#fff6dd;--warn-bd:#d99a00;--warn-ink:#4f3500;
+  --buy:#6d28d9;--buy-bg:#f0e9ff;--home:#0f6e5a;--home-bg:#e1f5ef;--host:#9a3412;--host-bg:#ffeadb;
+  --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 14px rgba(0,0,0,.06);--toast:#1f2937;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1216;--surface:#171b21;--surface2:#222831;--text:#eef1f5;--muted:#a5aebb;--border:#2f3642;
+  --accent:#5aa9ff;--accent-ink:#071425;--accent-soft:#16263d;
+  --c:#ff8f85;--c-bg:#3b1714;--i:#ffc766;--i-bg:#3a2a0c;--n:#c3cad4;--n-bg:#262c35;
+  --ok:#5fd3a5;--ok-bg:#0f2e22;--warn-bg:#33270a;--warn-bd:#c48a00;--warn-ink:#ffdf99;
+  --buy:#c4b1ff;--buy-bg:#2a2047;--home:#7ee0c4;--home-bg:#123129;--host:#ffb38a;--host-bg:#3a2010;
+  --shadow:0 1px 2px rgba(0,0,0,.4);--toast:#333c4a;color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0f1216;--surface:#171b21;--surface2:#222831;--text:#eef1f5;--muted:#a5aebb;--border:#2f3642;
+  --accent:#5aa9ff;--accent-ink:#071425;--accent-soft:#16263d;
+  --c:#ff8f85;--c-bg:#3b1714;--i:#ffc766;--i-bg:#3a2a0c;--n:#c3cad4;--n-bg:#262c35;
+  --ok:#5fd3a5;--ok-bg:#0f2e22;--warn-bg:#33270a;--warn-bd:#c48a00;--warn-ink:#ffdf99;
+  --buy:#c4b1ff;--buy-bg:#2a2047;--home:#7ee0c4;--home-bg:#123129;--host:#ffb38a;--host-bg:#3a2010;
+  --shadow:0 1px 2px rgba(0,0,0,.4);--toast:#333c4a;color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.45;cursor:default}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+h1,h2,h3{line-height:1.2}
+.wrap{max-width:640px;margin:0 auto}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.muted{color:var(--muted)}
+.small{font-size:14.5px;color:var(--muted)}
+
+/* buttons */
+.btn{min-height:48px;padding:8px 18px;border-radius:12px;border:1px solid var(--border);background:var(--surface);font-weight:650;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-align:center}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.danger{color:var(--c);border-color:var(--c)}
+.btn.block{width:100%;margin-top:10px}
+.btn.sm{min-height:44px;padding:4px 14px;font-size:15px}
+.iconbtn{flex:none;min-width:44px;height:44px;border:0;background:transparent;font-size:26px;line-height:1;border-radius:12px;display:grid;place-items:center}
+.link{border:0;background:none;color:var(--accent);font-weight:650;padding:10px 4px;min-height:44px;text-decoration:underline}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.row2 .btn{margin:0}
+.pill{display:inline-block;font-size:13px;font-weight:700;padding:3px 10px;border-radius:99px;background:var(--accent-soft);color:var(--accent)}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}
+
+/* home */
+.home-h{display:flex;align-items:center;justify-content:space-between;padding:calc(18px + env(safe-area-inset-top)) 16px 4px}
+.home-h h1{margin:0;font-size:30px}
+.home-h p{margin:2px 0 0}
+.home-main{padding:4px 16px calc(32px + env(safe-area-inset-bottom))}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;margin:12px 0;box-shadow:var(--shadow)}
+.tabs .card{margin:12px}
+.card h2{font-size:19px;margin:0 0 8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.card p{margin:6px 0}
+.tripcard{display:block;width:100%;text-align:left}
+.tc-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tc-top h2{margin:0;font-size:22px}
+.tc-stats{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px 12px;font-size:15px;font-weight:600;margin-top:8px!important}
+.crit-txt{color:var(--c)}
+.ok-txt{color:var(--ok)}
+.note{background:var(--accent-soft);border-radius:12px;padding:10px 12px;margin:12px 0;font-size:15px;color:var(--text)}
+.note.warnish{background:var(--warn-bg);color:var(--warn-ink)}
+
+/* progress */
+.pbar{display:block;height:10px;border-radius:99px;background:var(--surface2);overflow:hidden;margin-top:8px}
+.pbar i{display:block;height:100%;background:var(--ok);border-radius:inherit;transition:width .3s}
+.pbar.lg{height:14px}
+
+/* trip header */
+.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--border);padding-top:env(safe-area-inset-top)}
+.bar1{display:flex;align-items:center;gap:4px;padding:4px 6px;min-height:52px}
+.ttl{flex:1;min-width:0;display:flex;flex-direction:column;padding-left:4px}
+.ttl b{font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl span{font-size:13px;color:var(--muted)}
+.search{flex:1;position:relative;min-width:0}
+.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted);pointer-events:none}
+.search input{width:100%;height:44px;border-radius:12px;border:1px solid var(--border);background:var(--surface);font-size:17px;padding:0 42px 0 36px;-webkit-appearance:none;appearance:none}
+.search input::-webkit-search-cancel-button{display:none}
+.qx{position:absolute;right:0;top:0;width:44px;height:44px;border:0;background:none;color:var(--muted);font-size:18px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 8px 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;min-height:44px;padding:0 14px;border-radius:99px;border:1px solid var(--border);background:var(--surface);font-size:15px;font-weight:600;white-space:nowrap}
+.chip .n{font-weight:500;color:var(--muted);font-size:13px;margin-left:2px}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.chip[aria-pressed="true"] .n{color:inherit;opacity:.85}
+.chip.chip-done:not([aria-pressed="true"]){border-color:var(--ok)}
+.chip.chip-done .n::before{content:"✓ "}
+
+/* bottom nav */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom)}
+.nav-in{display:flex;max-width:640px;margin:0 auto}
+.nav button{flex:1;min-height:58px;border:0;background:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12.5px;font-weight:650}
+.nav button[aria-current="page"]{color:var(--accent)}
+.nav svg{width:24px;height:24px}
+.tabs{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+
+/* criticality + source badges: shape + letter + colour */
+.crit{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:2px;min-width:36px;height:24px;padding:0 5px;border-radius:6px;font-size:12px;font-weight:800;white-space:nowrap}
+.crit.lg{height:30px;font-size:15px;padding:0 10px}
+.crit-c{background:var(--c-bg);color:var(--c)}
+.crit-i{background:var(--i-bg);color:var(--i)}
+.crit-n{background:var(--n-bg);color:var(--n)}
+.src{flex:none;font-size:11px;font-weight:800;letter-spacing:.03em;padding:3px 6px;border-radius:6px;white-space:nowrap}
+.src-buy{background:var(--buy-bg);color:var(--buy)}
+.src-home{background:var(--home-bg);color:var(--home)}
+.src-host{background:var(--host-bg);color:var(--host)}
+.src-other{background:var(--n-bg);color:var(--n)}
+
+/* list */
+.lsum{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 14px;font-size:14.5px;color:var(--muted);min-height:44px}
+.group{margin:0 0 6px}
+.ghead{position:sticky;top:var(--hdr,150px);z-index:5;margin:0}
+.ghead button{width:100%;display:flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:0;border-bottom:1px solid var(--border);background:var(--surface2);font-size:15.5px;font-weight:750;text-align:left}
+.gname{flex:1}
+.gcount{font-size:13.5px;font-weight:600;color:var(--muted)}
+.chev{transition:transform .2s;color:var(--muted)}
+.ghead button[aria-expanded="false"] .chev{transform:rotate(-90deg)}
+.rows{list-style:none;margin:0;padding:0}
+.row{background:var(--surface);border-bottom:1px solid var(--border);transition:opacity .45s}
+.row.is-c{box-shadow:inset 4px 0 var(--c)}
+.rline{display:flex;align-items:stretch;min-height:46px}
+.rmain{flex:1;min-width:0;display:flex;align-items:center;gap:9px;padding:4px 2px 4px 12px;border:0;background:none;text-align:left}
+.name{flex:1;min-width:0;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-height:1.2;font-size:16px}
+.wi{color:var(--warn-bd);font-weight:800}
+.row.open .name{-webkit-line-clamp:unset;display:block;padding:10px 0;font-weight:650}
+.tags{display:flex;gap:6px;align-items:center;flex:none}
+.qty{font-size:13px;color:var(--muted);max-width:4.5em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tick{flex:none;position:relative;width:54px;display:grid;place-items:center;cursor:pointer}
+.tick input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.box{width:28px;height:28px;border:2px solid var(--muted);border-radius:8px;display:grid;place-items:center;background:var(--surface)}
+.tick input:checked+.box{background:var(--ok);border-color:var(--ok)}
+.tick input:checked+.box::after{content:"";width:7px;height:14px;border:solid #fff;border-width:0 3px 3px 0;transform:translateY(-2px) rotate(45deg)}
+.tick input:focus-visible+.box{outline:3px solid var(--accent);outline-offset:2px}
+.row.done .name{text-decoration:line-through;color:var(--muted)}
+.row.done .crit,.row.done .tags{opacity:.5}
+.row.leaving{opacity:.15}
+.details{padding:0 14px 12px 57px;font-size:15.5px}
+.dl{display:block;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:2px}
+.why,.notes{margin:6px 0}
+.warn{background:var(--warn-bg);border:1px solid var(--warn-bd);border-left-width:5px;border-radius:10px;padding:8px 10px;margin:8px 0;color:var(--warn-ink)}
+.warn .dl{color:var(--warn-ink)}
+mark{background:transparent;color:var(--warn-ink);border:1px dashed var(--warn-bd);padding:0 3px;border-radius:4px;font-weight:800}
+.dmeta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13.5px;color:var(--muted);margin:8px 0}
+.empty{text-align:center;padding:30px 16px;color:var(--muted)}
+.lfoot{padding:8px 12px 20px}
+
+/* dashboard */
+.dhead{padding:14px 16px 0}
+.dhead h1{margin:0;font-size:28px}
+.dhead p{margin:4px 0 8px;color:var(--muted)}
+.big{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.pct{font-size:44px;font-weight:800;line-height:1}
+.quick{display:grid;gap:8px;margin-top:14px}
+.quick .btn{justify-content:space-between;min-height:52px}
+.crit-card{border-color:var(--c);border-width:2px}
+.crit-card h2 b{margin-left:auto;background:var(--c);color:var(--surface);border-radius:99px;padding:1px 10px;font-size:15px}
+.crit-card .rows{margin:0 -14px}
+.crit-card .row:last-child{border-bottom:0}
+.ok{color:var(--ok);font-weight:650}
+.stat{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 10px;width:100%;padding:10px 2px;border:0;border-bottom:1px solid var(--border);background:none;text-align:left;min-height:52px}
+.stat:last-child{border-bottom:0}
+.slbl{display:flex;align-items:center;gap:8px;font-weight:600}
+.snum{font-size:14px;color:var(--muted);font-weight:600}
+.stat .pbar{grid-column:1/-1;height:8px;margin-top:4px}
+
+/* focus */
+.fwrap{display:flex;flex-direction:column;gap:10px;height:calc(100dvh - var(--hdr,150px) - 76px - env(safe-area-inset-bottom));padding:10px 12px}
+.fprog{display:flex;justify-content:space-between;gap:10px;font-size:15px}
+.fscope{color:var(--muted);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fwrap>.pbar{margin:0}
+.fcard{flex:1;min-height:0;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:18px;box-shadow:var(--shadow);touch-action:pan-y;user-select:none;-webkit-user-select:none;transition:transform .2s,opacity .2s;overflow:auto;position:relative}
+.fcard.is-packed{border-color:var(--ok);border-width:2px}
+.fcard[data-hint="done"]{outline:4px solid var(--ok)}
+.fcard[data-hint="skip"]{outline:4px solid var(--muted)}
+.fcat{font-size:14px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.fbadges{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.fbadges .src{font-size:13px;padding:6px 9px}
+.fcard h2{font-size:26px;margin:14px 0 8px}
+.fqty{font-size:18px;margin:4px 0 10px}
+.hint{font-size:13px;color:var(--muted);text-align:center;margin-top:16px}
+.factions{display:grid;grid-template-columns:1fr 1fr 1.6fr;gap:10px}
+.factions .btn{min-height:60px;font-size:18px;padding:8px}
+.fend{text-align:center;padding:24px 16px}
+.fend .big-ic{font-size:48px}
+
+/* more */
+.seg{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.seg button{min-height:48px;border:0;background:var(--surface);font-weight:650;font-size:15px}
+.seg button+button{border-left:1px solid var(--border)}
+.seg button[aria-checked="true"]{background:var(--accent);color:var(--accent-ink)}
+textarea.out{font-family:ui-monospace,Menlo,monospace;font-size:13px!important;word-break:break-all}
+.check{display:flex!important;align-items:center;gap:10px;font-weight:600;min-height:44px;margin:8px 0}
+.check input{width:24px;height:24px;min-height:0;flex:none}
+
+/* sheet (bottom dialog) + forms */
+dialog.sheet{border:0;padding:0;margin:auto auto 0;width:100%;max-width:640px;max-height:92dvh;overflow:auto;border-radius:20px 20px 0 0;background:var(--surface);color:var(--text);box-shadow:0 -8px 30px rgba(0,0,0,.25)}
+dialog.sheet::backdrop{background:rgba(0,0,0,.45)}
+.sheet-h{display:flex;align-items:center;justify-content:space-between;padding:10px 6px 0 16px;position:sticky;top:0;background:var(--surface);z-index:1}
+.sheet-h h2{margin:0;font-size:20px}
+.sheet-b{padding:4px 16px calc(20px + env(safe-area-inset-bottom))}
+.sheet-b h3{font-size:17px;margin:20px 0 4px}
+label{display:block;font-weight:650;font-size:15px;margin:12px 0 4px}
+dialog input:not([type=checkbox]):not([type=file]),.card input:not([type=checkbox]),select,textarea{width:100%;font-size:17px;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);min-height:46px}
+textarea{resize:vertical}
+.difflist{margin:6px 0;padding-left:20px}
+details summary{min-height:44px;display:flex;align-items:center;font-weight:650;color:var(--accent)}
+
+#toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(10px + env(safe-area-inset-top));z-index:50;background:var(--toast);color:#fff;padding:8px 8px 8px 14px;border-radius:12px;display:flex;gap:10px;align-items:center;width:max-content;max-width:calc(100vw - 32px);box-shadow:0 6px 20px rgba(0,0,0,.3);font-size:15.5px;min-height:44px}
+#toast .tbtn{border:0;background:none;color:#8fc4ff;font-weight:800;min-height:40px;padding:0 10px}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<div id="home" hidden>
+  <header class="home-h wrap">
+    <div><h1>Holiday lists</h1><p class="muted">Packing &amp; shopping checklists</p></div>
+    <button class="iconbtn" data-act="theme" aria-label="Change light or dark theme">◐</button>
+  </header>
+  <main class="wrap home-main">
+    <div id="homeList"></div>
+    <button class="btn primary block" data-act="newtrip">＋ New trip</button>
+    <button class="btn block" data-act="paste">Paste a shared link or code</button>
+    <button class="btn block" id="seedBtn" data-act="seed" hidden>Add the Barbados sample list</button>
+    <p class="note"><b>Saved on this device only.</b> There are no accounts: lists and ticks live in this browser. To copy them to another phone, open a trip and use <i>More → Share this list</i> or <i>Send my ticks</i>.</p>
+  </main>
+</div>
+
+<div id="trip" hidden>
+  <header class="top" id="tripHdr"><div class="wrap">
+    <div class="bar1">
+      <button class="iconbtn" data-act="back" aria-label="All trips">‹</button>
+      <div id="tripTitle" class="ttl"></div>
+      <div id="searchBox" class="search" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <input id="q" type="search" placeholder="Search items &amp; notes" aria-label="Search items and notes" autocomplete="off" enterkeyhint="search">
+        <button id="qx" class="qx" aria-label="Clear search" hidden>✕</button>
+      </div>
+      <button class="iconbtn" data-act="add" aria-label="Add an item">＋</button>
+    </div>
+    <div id="filters" hidden>
+      <div class="chips" id="fchips" role="group" aria-label="Filters"></div>
+      <div class="chips" id="cchips" role="group" aria-label="Categories"></div>
+    </div>
+  </div></header>
+  <main class="wrap tabs">
+    <section id="tab-dash" hidden></section>
+    <section id="tab-list" hidden></section>
+    <section id="tab-focus" hidden></section>
+    <section id="tab-more" hidden></section>
+  </main>
+  <nav class="nav" aria-label="Sections"><div class="nav-in">
+    <button data-act="tab" data-v="dash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></button>
+    <button data-act="tab" data-v="list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 6h11M10 12h11M10 18h11"/><path d="M3 6l1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17"/></svg><span>List</span></button>
+    <button data-act="tab" data-v="focus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 12l2 2 4-4"/></svg><span>Focus</span></button>
+    <button data-act="tab" data-v="more"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg><span>More</span></button>
+  </div></nav>
+</div>
+
+<dialog id="sheet" class="sheet" aria-labelledby="sheetTitle"></dialog>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(() => {
+'use strict';
+
+/* ---------- Embedded data: barbados_checklist_clean.csv (128 rows) ---------- */
+const SEED = [
+{"id": 1, "category": "Documents & money", "item": "Passports (British) x4", "qty": "4", "source": "Have at home", "criticality": "Critical", "why_critical": "Can't travel or enter without valid passports", "notes": "Must be valid for the whole stay (GOV.UK). Keep in hand luggage. Check Amani's and Zidan's expiry dates too.", "packed": "no", "sort_order": 1},
+{"id": 2, "category": "Documents & money", "item": "Online Barbados Immigration & Customs form (travelform.gov.bb)", "qty": "1 per traveller", "source": "Need to buy", "criticality": "Critical", "why_critical": "Compulsory to enter; opens 72h before arrival", "notes": "Compulsory. Opens 72h before arrival. Needs flight info, passports and an email. Save/print the receipts. On standby, update the flight details if you end up on a different flight.", "packed": "no", "sort_order": 2},
+{"id": 3, "category": "Documents & money", "item": "Return/onward ticket evidence (VS132 Fri 30 Oct 22:25)", "qty": "1", "source": "Have at home", "criticality": "Critical", "why_critical": "Visitors must show an onward/return ticket", "notes": "Visitors must show an onward/return ticket. Have the booking/ticket record on your phone.", "packed": "no", "sort_order": 3},
+{"id": 4, "category": "Documents & money", "item": "Accommodation address + booking confirmation (Allure 503, Brighton Beach, St Michael)", "qty": "1", "source": "Have at home", "criticality": "Critical", "why_critical": "Immigration asks for the full accommodation address", "notes": "Immigration asks for the full address of your accommodation. Screenshot the booking.", "packed": "no", "sort_order": 4},
+{"id": 5, "category": "Documents & money", "item": "Travel insurance policy details + emergency number", "qty": "1", "source": "Need to buy", "criticality": "Critical", "why_critical": "Healthcare is costly; clinics may want prepayment", "notes": "GOV.UK warns Barbados healthcare is costly and private clinics may want prepayment. Standby travel does not replace insurance.", "packed": "no", "sort_order": 5},
+{"id": 6, "category": "Documents & money", "item": "Monzo Max card + backup card", "qty": "2", "source": "Have at home", "criticality": "Critical", "why_critical": "Main way to pay and get cash", "notes": "Choose BBD, not GBP, if an ATM or terminal asks. Check the Monzo overseas cash allowance first.", "packed": "no", "sort_order": 6},
+{"id": 7, "category": "Documents & money", "item": "Copy of prescriptions / doctor's letter", "qty": "1 set", "source": "Need to buy", "criticality": "Critical", "why_critical": "Customs/medical proof for all medicines", "notes": "See Medicines section. Keep digital + paper copies.", "packed": "no", "sort_order": 7},
+{"id": 8, "category": "Documents & money", "item": "Monzo QR code / digital wallet set up on phone", "qty": "1", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "", "packed": "no", "sort_order": 8},
+{"id": 9, "category": "Documents & money", "item": "Some US$ cash / BDS$ small notes", "qty": "~US$150", "source": "Need to buy", "criticality": "Important", "why_critical": "", "notes": "US$ accepted island-wide (US$1 = BDS$2). Handy for the US$200 Allure deposit, if cash is wanted, and for buses/beach vendors. Declare cash over BDS$10,000.", "packed": "no", "sort_order": 9},
+{"id": 10, "category": "Documents & money", "item": "Driving licence (+ DVLA share code if hiring a car)", "qty": "1", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Only if hiring a car: visitors normally need a local visitor's driving permit, usually issued by the hire firm. UNVERIFIED, check with the hire company.", "packed": "no", "sort_order": 10},
+{"id": 11, "category": "Documents & money", "item": "Wise card (backup)", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "From the 2023/2025 Dhaka lists (\"take wise card\"). Optional second card.", "packed": "no", "sort_order": 11},
+{"id": 12, "category": "Electronics", "item": "UK to Barbados plug adapter (Type A/B, 2 flat pins) x4", "qty": "4", "source": "Need to buy", "criticality": "Critical", "why_critical": "Barbados uses Type A/B sockets; UK plugs won't fit", "notes": "Barbados uses Type A/B sockets. Take one per person plus a multi-USB charger so you need fewer adapters. Check at Allure whether any sockets are UK-style (unlikely).", "packed": "no", "sort_order": 1},
+{"id": 13, "category": "Electronics", "item": "Phone chargers + cables (USB-C) x4", "qty": "4", "source": "Have at home", "criticality": "Critical", "why_critical": "Phones need charging; must be 100-240V", "notes": "Check each charger says 100-240V.", "packed": "no", "sort_order": 2},
+{"id": 14, "category": "Electronics", "item": "Powerbank (in HAND luggage only)", "qty": "2", "source": "Have at home", "criticality": "Critical", "why_critical": "Lithium batteries allowed in cabin bag only (airline safety)", "notes": "Lithium batteries must go in cabin baggage, not hold luggage. Keep under 100Wh/ 27,000mAh.", "packed": "no", "sort_order": 3},
+{"id": 15, "category": "Electronics", "item": "Hairdryer / straighteners", "qty": "0", "source": "Provided - check with host", "criticality": "Critical", "why_critical": "UK 230V hair tools can be damaged or unsafe on 115V", "notes": "DO NOT bring UK 230V hair tools. Allure 503 lists a hair dryer. If you need straighteners, bring dual-voltage ones only.", "packed": "no", "sort_order": 4},
+{"id": 16, "category": "Electronics", "item": "Multi-USB charging socket / block (100-240V)", "qty": "1", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Plug it into one adapter and charge everything from it.", "packed": "no", "sort_order": 5},
+{"id": 17, "category": "Electronics", "item": "Charging cable in cabin bag for the flight", "qty": "1", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "From your 'Remember to' list: charging cable for flight.", "packed": "no", "sort_order": 6},
+{"id": 18, "category": "Electronics", "item": "Galaxy fast charger", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Marked 100-240V on most models.", "packed": "no", "sort_order": 7},
+{"id": 19, "category": "Electronics", "item": "Watch charger (G-Shock/Galaxy watch)", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 8},
+{"id": 20, "category": "Electronics", "item": "Fitbit charger", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 9},
+{"id": 21, "category": "Electronics", "item": "Kindle Scribe x3 + chargers", "qty": "3", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Reused (Dhaka took 3). Take as many as you need.", "packed": "no", "sort_order": 10},
+{"id": 22, "category": "Electronics", "item": "Tablets / iPads for kids + chargers", "qty": "2", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "For the flight and evenings. Download films/games before you leave.", "packed": "no", "sort_order": 11},
+{"id": 23, "category": "Electronics", "item": "Headphones: Bose", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 12},
+{"id": 24, "category": "Electronics", "item": "Headphones: Amani's", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 13},
+{"id": 25, "category": "Electronics", "item": "Small Bluetooth speaker", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Good for the balcony. Keep the volume considerate in a shared building.", "packed": "no", "sort_order": 14},
+{"id": 26, "category": "Electronics", "item": "Camera / action cam + SD card (GoPro for snorkelling?)", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Optional but nice for snorkelling. Lithium batteries in cabin bag.", "packed": "no", "sort_order": 15},
+{"id": 27, "category": "Electronics", "item": "Waterproof phone pouches", "qty": "4", "source": "Need to buy", "criticality": "Nice to have", "why_critical": "", "notes": "Cheap, useful for beach/snorkel photos.", "packed": "no", "sort_order": 16},
+{"id": 28, "category": "Electronics", "item": "Galaxy SmartTag in each suitcase", "qty": "2-3", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Handy if a bag is delayed on a standby trip.", "packed": "no", "sort_order": 17},
+{"id": 29, "category": "Electronics", "item": "Toothbrush charger / floss charger (check voltage)", "qty": "2", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Some dental chargers are 230V only. Check the label, otherwise use a manual toothbrush.", "packed": "no", "sort_order": 18},
+{"id": 30, "category": "Electronics", "item": "Beard trimmer / head razor / moustache trimmer (USB or 100-240V)", "qty": "1-2", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Cordless USB-charge models are fine. A 230V-only mains shaver will not work safely on 115V.", "packed": "no", "sort_order": 19},
+{"id": 31, "category": "Clothing", "item": "T-shirts / light tops (adults)", "qty": "6", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Hot and humid, ~30°C. Cotton or quick-dry.", "packed": "no", "sort_order": 1},
+{"id": 32, "category": "Clothing", "item": "Shorts (adults and kids)", "qty": "6", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "CHECK none are camouflage print. Camouflage clothing is illegal for everyone, including children.", "packed": "no", "sort_order": 2},
+{"id": 33, "category": "Clothing", "item": "Dresses / tunics / modest beachwear (Tasmia, Amani)", "qty": "6", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Modest options, if preferred, for public beaches and town.", "packed": "no", "sort_order": 3},
+{"id": 34, "category": "Clothing", "item": "Zidan outfits (11 yrs)", "qty": "6", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Plus a spare outfit for the flight.", "packed": "no", "sort_order": 4},
+{"id": 35, "category": "Clothing", "item": "Underwear", "qty": "8 each", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Pack extra. Humidity and swimming mean more changes. Allure has a washer/dryer.", "packed": "no", "sort_order": 5},
+{"id": 36, "category": "Clothing", "item": "Pyjamas", "qty": "4 sets", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "A/C inside, so light pyjamas.", "packed": "no", "sort_order": 6},
+{"id": 37, "category": "Clothing", "item": "Light cardigan / hoodie for plane and A/C", "qty": "4", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Flights are cold; the apartment A/C can be cool.", "packed": "no", "sort_order": 7},
+{"id": 38, "category": "Clothing", "item": "Lightweight rain jackets", "qty": "4", "source": "Need to buy", "criticality": "Important", "why_critical": "", "notes": "Late Oct is the tail end of the wet season. Short, heavy showers are likely.", "packed": "no", "sort_order": 8},
+{"id": 39, "category": "Clothing", "item": "Flip-flops / sandals", "qty": "4 pairs", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "", "packed": "no", "sort_order": 9},
+{"id": 40, "category": "Clothing", "item": "Comfortable walking shoes / trainers", "qty": "4 pairs", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Wear the bulkiest on the plane.", "packed": "no", "sort_order": 10},
+{"id": 41, "category": "Clothing", "item": "Sun hats / caps", "qty": "4", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "", "packed": "no", "sort_order": 11},
+{"id": 42, "category": "Clothing", "item": "Sunglasses (UV400)", "qty": "4", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Pack in cabin bag.", "packed": "no", "sort_order": 12},
+{"id": 43, "category": "Clothing", "item": "Light trousers / linen for evenings", "qty": "3", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "For restaurants and cooler evenings.", "packed": "no", "sort_order": 13},
+{"id": 44, "category": "Clothing", "item": "Kurta / Punjabi for Jummah or evening (if wanted)", "qty": "2", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Optional. Light cotton is good in humid weather.", "packed": "no", "sort_order": 14},
+{"id": 45, "category": "Clothing", "item": "Socks", "qty": "4 pairs each", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Mostly for flights and tennis.", "packed": "no", "sort_order": 15},
+{"id": 46, "category": "Clothing", "item": "Laundry bag", "qty": "1", "source": "Need to buy", "criticality": "Nice to have", "why_critical": "", "notes": "Cheap, packable. There is a washer/dryer in the unit.", "packed": "no", "sort_order": 16},
+{"id": 47, "category": "Swim & beach", "item": "Swimwear (adults)", "qty": "2 each", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "CHECK no camouflage print.", "packed": "no", "sort_order": 1},
+{"id": 48, "category": "Swim & beach", "item": "Swimwear (kids)", "qty": "2 each", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Amani and Zidan. Reused from Dhaka list 'Amani and Zidan swim gear'.", "packed": "no", "sort_order": 2},
+{"id": 49, "category": "Swim & beach", "item": "Snorkel set: Zidan (11) - kids size mask + snorkel + fins", "qty": "1", "source": "Need to buy", "criticality": "Important", "why_critical": "", "notes": "Choose a kids' mask (silicone skirt, tempered glass). Fins are bulky; consider adjustable ones.", "packed": "no", "sort_order": 3},
+{"id": 50, "category": "Swim & beach", "item": "Snorkel set: Amani (17) - adult S/M", "qty": "1", "source": "Need to buy", "criticality": "Important", "why_critical": "", "notes": "Adult small mask fits most 17-year-olds. Try on at home before you pack: hold it to your face without the strap and breathe in.", "packed": "no", "sort_order": 4},
+{"id": 51, "category": "Swim & beach", "item": "Reef-safe sun cream SPF50 (mineral)", "qty": "2-3 bottles", "source": "Need to buy", "criticality": "Important", "why_critical": "", "notes": "Reef-safe protects the reefs. Sun cream is easy to buy but expensive on the island, so buy before you fly. Total liquids must follow cabin 100ml rules, so pack in hold.", "packed": "no", "sort_order": 5},
+{"id": 52, "category": "Swim & beach", "item": "Beach towels (quick-dry)", "qty": "4", "source": "Provided - check with host", "criticality": "Important", "why_critical": "", "notes": "Allure says to use 'beach towels' (stated for unit 401). For 503 this is unconfirmed: CHECK WITH HOST. Pack quick-dry travel towels if not provided.", "packed": "no", "sort_order": 6},
+{"id": 53, "category": "Swim & beach", "item": "Snorkel sets: adults (Rashed, Tasmia) - optional", "qty": "2", "source": "Need to buy", "criticality": "Nice to have", "why_critical": "", "notes": "Optional. Hiring locally is another option; sets are widely available on the west coast.", "packed": "no", "sort_order": 7},
+{"id": 54, "category": "Swim & beach", "item": "Swim goggles", "qty": "4", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 8},
+{"id": 55, "category": "Swim & beach", "item": "Rash vests / UV swim tops (kids)", "qty": "2 each", "source": "Need to buy", "criticality": "Nice to have", "why_critical": "", "notes": "UPF 50+. Good for long snorkel sessions in strong sun.", "packed": "no", "sort_order": 9},
+{"id": 56, "category": "Swim & beach", "item": "Water shoes / reef shoes", "qty": "4", "source": "Need to buy", "criticality": "Nice to have", "why_critical": "", "notes": "Useful for rocky or coral-sand entries.", "packed": "no", "sort_order": 10},
+{"id": 57, "category": "Swim & beach", "item": "Beach bag / dry bag", "qty": "1", "source": "Need to buy", "criticality": "Nice to have", "why_critical": "", "notes": "A dry bag keeps phones and keys safe.", "packed": "no", "sort_order": 11},
+{"id": 58, "category": "Swim & beach", "item": "Beach loungers / chairs", "qty": "", "source": "Provided - check with host", "criticality": "Nice to have", "why_critical": "", "notes": "Allure advertises complimentary beach loungers and a beach shower.", "packed": "no", "sort_order": 12},
+{"id": 59, "category": "Swim & beach", "item": "Waterproof sports watch (G-Shock)", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 13},
+{"id": 60, "category": "Toiletries & health", "item": "Contact lenses + solution + glasses", "qty": "As needed", "source": "Have at home", "criticality": "Critical", "why_critical": "Can't see without lenses/glasses", "notes": "Bring a spare pair of glasses.", "packed": "no", "sort_order": 1},
+{"id": 61, "category": "Toiletries & health", "item": "Insect repellent (DEET or icaridin)", "qty": "2", "source": "Need to buy", "criticality": "Critical", "why_critical": "Dengue, Zika and chikungunya risks listed by GOV.UK", "notes": "Dengue, Zika and chikungunya are all listed health risks by GOV.UK. Use at dawn and dusk. Apply sun cream first.", "packed": "no", "sort_order": 2},
+{"id": 62, "category": "Toiletries & health", "item": "Allopurinol (Rashed) - 5+ days supply (+ spare)", "qty": "Full pack", "source": "Have at home", "criticality": "Critical", "why_critical": "Rashed's daily medicine; must travel in labelled box", "notes": "Carry in cabin bag in the original labelled box, with a copy of the prescription. Allopurinol is not a controlled drug, so it is normally fine, but declare medicines on the form if asked. Bring extra in case of delay.", "packed": "no", "sort_order": 3},
+{"id": 63, "category": "Toiletries & health", "item": "Regular prescription medicines (all family)", "qty": "As needed", "source": "Have at home", "criticality": "Critical", "why_critical": "Family prescriptions; controlled drugs need paperwork", "notes": "Original packaging with the pharmacy label. Controlled drugs (e.g. strong painkillers, ADHD meds) need extra paperwork. See 'Customs & rules' tab.", "packed": "no", "sort_order": 4},
+{"id": 64, "category": "Toiletries & health", "item": "Toothbrushes + toothpaste", "qty": "4", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "", "packed": "no", "sort_order": 5},
+{"id": 65, "category": "Toiletries & health", "item": "Amani - extra braces / dental items", "qty": "1 set", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Reused from Dhaka list ('Amani extra braces dental'). Bring wax and spare elastics.", "packed": "no", "sort_order": 6},
+{"id": 66, "category": "Toiletries & health", "item": "Basic toiletries (shampoo, body wash, soap)", "qty": "", "source": "Provided - check with host", "criticality": "Important", "why_critical": "", "notes": "Rashed says basic toiletries are provided. Allure's 401 listing shows soap and shampoo. CHECK with host. Bring your own conditioner or specifics.", "packed": "no", "sort_order": 7},
+{"id": 67, "category": "Toiletries & health", "item": "Deodorant (non-aerosol if possible)", "qty": "4", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Aerosol sizes are limited in hand luggage.", "packed": "no", "sort_order": 8},
+{"id": 68, "category": "Toiletries & health", "item": "Sanitary products (Tasmia, Amani)", "qty": "As needed", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Pack extra. Prices are higher locally.", "packed": "no", "sort_order": 9},
+{"id": 69, "category": "Toiletries & health", "item": "Sun cream SPF50 (face and body)", "qty": "2 bottles", "source": "Need to buy", "criticality": "Important", "why_critical": "", "notes": "UK SPF50 with UVA is plenty. Reapply after swimming.", "packed": "no", "sort_order": 10},
+{"id": 70, "category": "Toiletries & health", "item": "Paracetamol / ibuprofen (adult and child)", "qty": "2 packs", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Calpol/ibuprofen for Zidan.", "packed": "no", "sort_order": 11},
+{"id": 71, "category": "Toiletries & health", "item": "Antihistamines + hydrocortisone cream", "qty": "1 each", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "For bites and stings.", "packed": "no", "sort_order": 12},
+{"id": 72, "category": "Toiletries & health", "item": "Motion sickness tablets (kids and Tasmia)", "qty": "1", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "For the plane and boat or catamaran trips.", "packed": "no", "sort_order": 13},
+{"id": 73, "category": "Toiletries & health", "item": "Dental floss", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 14},
+{"id": 74, "category": "Toiletries & health", "item": "Corsodyl / mouthwash (travel size)", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Over 100ml needs to go in the hold.", "packed": "no", "sort_order": 15},
+{"id": 75, "category": "Toiletries & health", "item": "Conditioner, hair oil, hair products", "qty": "As needed", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Humidity makes hair frizzy. Bring what you use.", "packed": "no", "sort_order": 16},
+{"id": 76, "category": "Toiletries & health", "item": "Razor, blades, shaving gel", "qty": "1 set", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 17},
+{"id": 77, "category": "Toiletries & health", "item": "Beard colour", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 18},
+{"id": 78, "category": "Toiletries & health", "item": "Face cream (Body Shop)", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 19},
+{"id": 79, "category": "Toiletries & health", "item": "After-sun / aloe vera gel", "qty": "2", "source": "Need to buy", "criticality": "Nice to have", "why_critical": "", "notes": "Aloe gel is also sold locally.", "packed": "no", "sort_order": 20},
+{"id": 80, "category": "Toiletries & health", "item": "Hand sanitiser / antibacterial wipes", "qty": "2", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 21},
+{"id": 81, "category": "Toiletries & health", "item": "Rehydration sachets", "qty": "8", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Heat plus new food. Reused: effervescent energy tablets.", "packed": "no", "sort_order": 22},
+{"id": 82, "category": "Toiletries & health", "item": "Electrolyte / energy effervescent tablets", "qty": "1 tube", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 23},
+{"id": 83, "category": "Toiletries & health", "item": "Gaviscon tablets", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 24},
+{"id": 84, "category": "Toiletries & health", "item": "Plasters / blister plasters / finger bandage", "qty": "1 set", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 25},
+{"id": 85, "category": "Toiletries & health", "item": "Omega 3 / Centrum / magnesium sleep tablets", "qty": "1 pack each", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Supplements are personal effects, but keep them in labelled packaging.", "packed": "no", "sort_order": 26},
+{"id": 86, "category": "Toiletries & health", "item": "Nicotine pouches / vape (only if used)", "qty": "As needed", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "From the Dhaka list. Vapes are NOT part of the duty-free allowance and may be dutiable. No clear official rule on nicotine pouches. Declare if in doubt. Consider whether to take them at all.", "packed": "no", "sort_order": 27},
+{"id": 87, "category": "Kitchen & food", "item": "Halal meat: DO NOT bring from UK", "qty": "0", "source": "Need to buy", "criticality": "Critical", "why_critical": "Meat/poultry needs a permit; UK poultry banned; confiscated", "notes": "UK poultry cannot be imported and permits are needed for all meat, dairy and eggs (25 lb max). Buy locally. See 'Halal & groceries' notes below.", "packed": "no", "sort_order": 1},
+{"id": 88, "category": "Kitchen & food", "item": "Halal chicken (Amir's Fresh Halal Chicken, local)", "qty": "As needed", "source": "Need to buy", "criticality": "Critical", "why_critical": "Halal food needed and UK meat can't be brought", "notes": "Local halal-certified chicken (Fasons Foods) supplied to supermarkets. Phone 246-428-2647 to ask which supermarkets near Brighton Beach stock it.", "packed": "no", "sort_order": 2},
+{"id": 89, "category": "Kitchen & food", "item": "Ghee / milk powder / cheese from UK", "qty": "0", "source": "Have at home", "criticality": "Critical", "why_critical": "Dairy needs a permit; confiscated if undeclared", "notes": "Dairy is an animal-origin product and needs a permit and approved-country rules. Leave at home.", "packed": "no", "sort_order": 3},
+{"id": 90, "category": "Kitchen & food", "item": "Fully equipped kitchen: cookware, crockery, cutlery, toaster, microwave, oven, dishwasher, fridge, coffee/tea maker", "qty": "", "source": "Provided - check with host", "criticality": "Important", "why_critical": "", "notes": "Listed by the Allure unit agents. For 503 the exact list of pans/knives/spice shelves is unconfirmed: CHECK WITH HOST.", "packed": "no", "sort_order": 4},
+{"id": 91, "category": "Kitchen & food", "item": "Washing-up liquid, sponge, dishwasher tablets, bin bags", "qty": "", "source": "Provided - check with host", "criticality": "Important", "why_critical": "", "notes": "Often only a small starter amount. CHECK, and buy locally on day 1.", "packed": "no", "sort_order": 5},
+{"id": 92, "category": "Kitchen & food", "item": "Reusable water bottles (insulated)", "qty": "4", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Tap water is safe to drink in Barbados (Visit Barbados). Bring empty bottles through security.", "packed": "no", "sort_order": 6},
+{"id": 93, "category": "Kitchen & food", "item": "Dried spices and masalas (sealed, commercial packs)", "qty": "Small packs", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Processed/dried spices in sealed commercial packs are normally ok. Declare any fresh, whole-seed or unprocessed plant products, as these must be inspected by Plant Quarantine. UNVERIFIED for spices; if in doubt, declare.", "packed": "no", "sort_order": 7},
+{"id": 94, "category": "Kitchen & food", "item": "Shelf-stable snacks for the flight and kids (crisps, cereal bars, nuts)", "qty": "Plenty", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Avoid anything with meat or dairy filling. Eat or bin leftover fruit before landing: fresh fruit/veg must be declared.", "packed": "no", "sort_order": 8},
+{"id": 95, "category": "Kitchen & food", "item": "Fish and seafood (halal-friendly, buy fresh)", "qty": "As needed", "source": "Need to buy", "criticality": "Important", "why_critical": "", "notes": "Fresh fish is sold by local vendors and supermarkets (exact fish markets not verified). Easy halal-friendly option for most families.", "packed": "no", "sort_order": 9},
+{"id": 96, "category": "Kitchen & food", "item": "Eggs, vegetables, fruit, dairy", "qty": "As needed", "source": "Need to buy", "criticality": "Important", "why_critical": "", "notes": "Buy locally. Vegetable markets, e.g. Cheapside and Barven (6-13 minutes from the apartment per one listing).", "packed": "no", "sort_order": 10},
+{"id": 97, "category": "Kitchen & food", "item": "Prayer mat + qibla compass app + small Quran", "qty": "4 mats", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Use a qibla app on arrival to set the direction.", "packed": "no", "sort_order": 11},
+{"id": 98, "category": "Kitchen & food", "item": "Kitchen roll, cling film, tin foil, zip bags", "qty": "1 each", "source": "Need to buy", "criticality": "Nice to have", "why_critical": "", "notes": "Buy in a Barbados supermarket (A1, Massy, etc.) to save luggage.", "packed": "no", "sort_order": 12},
+{"id": 99, "category": "Kitchen & food", "item": "Small cool bag + ice packs", "qty": "1", "source": "Need to buy", "criticality": "Nice to have", "why_critical": "", "notes": "For beach days and drinks. Pack flat in the suitcase.", "packed": "no", "sort_order": 13},
+{"id": 100, "category": "Kitchen & food", "item": "Tea bags / favourite tea", "qty": "1 box", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Tea is a processed plant product, normally fine. Declare if in doubt. 'Unprocessed' plant products must be declared.", "packed": "no", "sort_order": 14},
+{"id": 101, "category": "Kitchen & food", "item": "Coffee: AeroPress + filters + plunger seal", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Reused (coffee aeropress + replacement plunger).", "packed": "no", "sort_order": 15},
+{"id": 102, "category": "Kitchen & food", "item": "Ground coffee / favourite coffee", "qty": "1 bag", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Roasted coffee is processed, normally fine.", "packed": "no", "sort_order": 16},
+{"id": 103, "category": "Kitchen & food", "item": "Curry paste / sauces in jars (vegetarian only)", "qty": "2-3", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Check labels: sauces containing meat or dairy count as animal products and need a permit. Veg-only is safer.", "packed": "no", "sort_order": 17},
+{"id": 104, "category": "Kitchen & food", "item": "Tupperware / lunch boxes", "qty": "2", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "For packed beach lunches.", "packed": "no", "sort_order": 18},
+{"id": 105, "category": "Flight & cabin bag", "item": "Medicines in cabin bag (never in hold)", "qty": "All", "source": "Have at home", "criticality": "Critical", "why_critical": "Medicines must be in cabin bag with labels", "notes": "Original packaging with labels and prescription copies.", "packed": "no", "sort_order": 1},
+{"id": 106, "category": "Flight & cabin bag", "item": "Cabin bag packing: 1 change of clothes each", "qty": "4 sets", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Standby can mean delays or an overnight. Pack as if the hold bag could be late.", "packed": "no", "sort_order": 2},
+{"id": 107, "category": "Flight & cabin bag", "item": "Swimwear + sun cream in cabin bag (24h essentials)", "qty": "1 set", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "So you can start the holiday even if checked bags are delayed.", "packed": "no", "sort_order": 3},
+{"id": 108, "category": "Flight & cabin bag", "item": "Spare phone SIM / eSIM (Barbados roaming)", "qty": "1", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "Check UK network roaming charges, or buy a local eSIM. Visit Barbados recommends activating roaming before arrival.", "packed": "no", "sort_order": 4},
+{"id": 109, "category": "Flight & cabin bag", "item": "Travel pillows / eye masks / ear plugs", "qty": "4", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 5},
+{"id": 110, "category": "Tennis", "item": "Tennis shoes", "qty": "2 pairs", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Wear them on the plane to save space.", "packed": "no", "sort_order": 1},
+{"id": 111, "category": "Tennis", "item": "Tennis rackets x2 (Rashed + one for Amani/Zidan)", "qty": "2", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Fine in the hold; pack in the racket bag with clothes for padding. Not a customs issue.", "packed": "no", "sort_order": 2},
+{"id": 112, "category": "Tennis", "item": "Tennis balls (sealed can)", "qty": "1-2 cans", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Some kit is sold locally but pricey. Barbados National Tennis Centre (Wildey): BD$25/hr visitors.", "packed": "no", "sort_order": 3},
+{"id": 113, "category": "Tennis", "item": "Tennis bag", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 4},
+{"id": 114, "category": "Tennis", "item": "Tennis caps, wrist strap, grips", "qty": "1 set", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 5},
+{"id": 115, "category": "Tennis", "item": "Hamstring strap / exercise bands", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Reused (hamstring strap, exercise bands). Small.", "packed": "no", "sort_order": 6},
+{"id": 116, "category": "Miscellaneous", "item": "Camouflage check: NO camo clothing, hats or bags", "qty": "", "source": "Have at home", "criticality": "Critical", "why_critical": "Camouflage is illegal to wear or carry, even for kids", "notes": "Illegal to wear or carry camouflage items, including children (GOV.UK, Visit Barbados, Canada). Check kids' shorts, caps and backpacks.", "packed": "no", "sort_order": 1},
+{"id": 117, "category": "Miscellaneous", "item": "Small day backpack (beach/town)", "qty": "2", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 2},
+{"id": 118, "category": "Miscellaneous", "item": "Umbrella (compact)", "qty": "2", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Short, sharp showers likely in late Oct.", "packed": "no", "sort_order": 3},
+{"id": 119, "category": "Miscellaneous", "item": "Zip bags / dry bags for phones", "qty": "6", "source": "Need to buy", "criticality": "Nice to have", "why_critical": "", "notes": "Useful in the rain and at the beach.", "packed": "no", "sort_order": 4},
+{"id": 120, "category": "Miscellaneous", "item": "Spare empty foldable bag for the return", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "Souvenirs and wet items.", "packed": "no", "sort_order": 5},
+{"id": 121, "category": "Before leaving home", "item": "Fill in the Barbados Immigration & Customs form (Sat/Sun before the flight)", "qty": "4", "source": "Need to buy", "criticality": "Critical", "why_critical": "Compulsory online form; must be done before flying", "notes": "The form is only available 72h before arrival, so do it once it opens (flight info needed).", "packed": "no", "sort_order": 1},
+{"id": 122, "category": "Before leaving home", "item": "Check weather and hurricane updates before departure", "qty": "1", "source": "Have at home", "criticality": "Critical", "why_critical": "Safety: hurricane season runs to 30 Nov", "notes": "Barbados Met Service / NHC. Hurricane season runs to 30 Nov.", "packed": "no", "sort_order": 2},
+{"id": 123, "category": "Before leaving home", "item": "Turn off water at stopcock / cork", "qty": "1", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "", "packed": "no", "sort_order": 3},
+{"id": 124, "category": "Before leaving home", "item": "Heating setting: set for an empty house", "qty": "1", "source": "Have at home", "criticality": "Important", "why_critical": "", "notes": "", "packed": "no", "sort_order": 4},
+{"id": 125, "category": "Before leaving home", "item": "Turn off TV and main TV switch", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 5},
+{"id": 126, "category": "Before leaving home", "item": "Turn off Philips Hue / smart devices", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 6},
+{"id": 127, "category": "Before leaving home", "item": "Garden water: check automatic watering", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "", "packed": "no", "sort_order": 7},
+{"id": 128, "category": "Before leaving home", "item": "Car at Heathrow/airport: take off battery if parking at home, or book parking", "qty": "1", "source": "Have at home", "criticality": "Nice to have", "why_critical": "", "notes": "From your 2025 list ('take off car battery'). Not needed if the car stays in use.", "packed": "no", "sort_order": 8}
+];
+const SEED_META = {uid:'barbados-2026-allure503', name:'Barbados', sub:'LHR → BGI · Allure 503 · 4 nights', start:'2026-10-26', end:'2026-10-30'};
+
+/* ---------- Constants & helpers ---------- */
+const KEY = 'holidayLists.v1';
+const COLS = ['id','category','item','qty','source','criticality','why_critical','notes','packed','sort_order'];
+const CRIT = [
+  {k:'Critical', ic:'▲', ab:'C', cls:'c'},
+  {k:'Important', ic:'●', ab:'I', cls:'i'},
+  {k:'Nice to have', ic:'◇', ab:'N', cls:'n'}];
+const SRC = [
+  {k:'Need to buy', ab:'BUY', cls:'buy', lbl:'Need to buy'},
+  {k:'Have at home', ab:'HOME', cls:'home', lbl:'Have at home'},
+  {k:'Provided - check with host', ab:'HOST', cls:'host', lbl:'Provided by host'}];
+const WARN_RE = /customs|declare|illegal|permit|confiscat|quarantine|dutiable|cannot be imported|camouflage/i;
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const h = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clean = v => String(v ?? '').trim();
+const clone = o => JSON.parse(JSON.stringify(o));
+const newUid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+const critOf = it => CRIT.find(c => c.k === it.criticality) || CRIT[2];
+const srcOf = it => SRC.find(s => s.k === it.source) || {k:it.source, ab:'OTHER', cls:'other', lbl:it.source || '—'};
+const isWarn = it => WARN_RE.test(it.notes) && !/not a customs issue/i.test(it.notes);
+const rich = s => h(s).replace(/\bUNVERIFIED\b/g, '<mark>UNVERIFIED</mark>');
+const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+
+function matchOpt(v, opts) {
+  v = clean(v).toLowerCase();
+  if (!v) return null;
+  const o = opts.find(o => o.k.toLowerCase() === v) || opts.find(o => o.k.toLowerCase().startsWith(v.split(/[\s-]/)[0]));
+  return o ? o.k : null;
+}
+
+/* ---------- Trips & storage ---------- */
+function normItems(rows) {
+  const used = new Set();
+  let max = 0;
+  rows.forEach(r => { const n = parseInt(r.id, 10); if (n > max) max = n; });
+  return rows.map((r, i) => {
+    let id = parseInt(r.id, 10);
+    if (!Number.isFinite(id) || used.has(id)) id = ++max;
+    used.add(id);
+    const so = parseFloat(r.sort_order);
+    return {
+      id, category: clean(r.category) || 'General', item: clean(r.item), qty: clean(r.qty),
+      source: matchOpt(r.source, SRC) || clean(r.source) || 'Have at home',
+      criticality: matchOpt(r.criticality, CRIT) || 'Nice to have',
+      why_critical: clean(r.why_critical), notes: clean(r.notes),
+      sort_order: Number.isFinite(so) ? so : i + 1,
+      _packed: /^(y|yes|true|1|x|✓)$/i.test(clean(r.packed))
+    };
+  }).filter(it => it.item);
+}
+
+function newTrip(meta, rows, builtin) {
+  const items = normItems(rows), state = {};
+  items.forEach(it => { if (it._packed) state[it.id] = {p:1, t:0}; delete it._packed; });
+  return {
+    uid: meta.uid || newUid(), name: meta.name || 'My trip', sub: meta.sub || '',
+    start: meta.start || '', end: meta.end || '', builtin: !!builtin, items,
+    orig: builtin ? null : clone(items), origState: clone(state), state, created: Date.now()
+  };
+}
+
+function originalOf(t) {
+  if (t.builtin) { const n = newTrip(SEED_META, SEED, true); return {items:n.items, state:n.state}; }
+  return {items: clone(t.orig || []), state: clone(t.origState || {})};
+}
+
+let saveWarned = false;
+function persist(d = DB) {
+  try { localStorage.setItem(KEY, JSON.stringify(d)); return true; }
+  catch (e) {
+    if (!saveWarned) { saveWarned = true; setTimeout(() => toast('Couldn’t save on this device (private browsing or storage full). Changes may be lost on refresh.', null, null, 7000), 0); }
+    return false;
+  }
+}
+
+function load() {
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
+  if (!d || !Array.isArray(d.trips)) d = {trips: []};
+  d.settings = Object.assign({theme:'system', device:'', last:null}, d.settings);
+  if (!d.seeded) {
+    if (!d.trips.some(t => t.uid === SEED_META.uid)) d.trips.unshift(newTrip(SEED_META, SEED, true));
+    d.seeded = true;
+    persist(d);
+  }
+  return d;
+}
+
+const DB = load();
+const getTrip = uid => DB.trips.find(t => t.uid === uid);
+const itemById = (t, id) => t.items.find(i => i.id === +id);
+const isPacked = (t, id) => !!(t.state[id] && t.state[id].p);
+const countPacked = (t, its = t.items) => its.filter(i => isPacked(t, i.id)).length;
+function setPacked(t, id, p) { t.state[id] = {p: p ? 1 : 0, t: Date.now()}; persist(); }
+
+function catOrder(t) {
+  const o = [];
+  t.items.forEach(it => { if (!o.includes(it.category)) o.push(it.category); });
+  return o;
+}
+function sorted(t) {
+  const o = catOrder(t);
+  return t.items.slice().sort((a, b) => o.indexOf(a.category) - o.indexOf(b.category) || a.sort_order - b.sort_order || a.id - b.id);
+}
+function maxSort(t, cat, exceptId) {
+  return Math.max(0, ...t.items.filter(i => i.category === cat && i.id !== exceptId).map(i => i.sort_order));
+}
+
+/* ---------- Dates ---------- */
+const fmtDay = iso => new Date(iso + 'T00:00').toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'});
+function dateRange(t) {
+  if (!t.start) return '';
+  const y = new Date((t.end || t.start) + 'T00:00').getFullYear();
+  return fmtDay(t.start) + (t.end && t.end !== t.start ? ' – ' + fmtDay(t.end) : '') + ' ' + y;
+}
+function countdown(t) {
+  if (!t.start) return '';
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const s = new Date(t.start + 'T00:00'), e = new Date((t.end || t.start) + 'T00:00');
+  const d = Math.round((s - today) / 864e5);
+  if (d > 1) return `Leaves in ${d} days`;
+  if (d === 1) return 'Leaves tomorrow';
+  if (d === 0) return 'Leaves today';
+  return today <= e ? 'Trip underway' : 'Trip finished';
+}
+const fmtWhen = ts => ts ? new Date(ts).toLocaleString('en-GB', {weekday:'short', day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : 'unknown time';
+
+/* ---------- UI state ---------- */
+const UI = {trip:null, tab:'dash', q:'', st:'', crit:'', src:'', cat:'', open:new Set(), collapsed:new Set(), focus:{key:'', queue:[], i:0}};
+function resetFilters() {
+  Object.assign(UI, {q:'', st:'', crit:'', src:'', cat:''});
+  $('#q').value = '';
+  $('#qx').hidden = true;
+}
+const filtersActive = () => !!(UI.q || UI.st || UI.crit || UI.src || UI.cat);
+function matches(t, it) {
+  if (UI.cat && it.category !== UI.cat) return false;
+  if (UI.crit && it.criticality !== UI.crit) return false;
+  if (UI.src && it.source !== UI.src) return false;
+  if (UI.st === 'todo' && isPacked(t, it.id)) return false;
+  if (UI.q) {
+    const hay = [it.item, it.notes, it.category, it.why_critical, it.qty].join(' ').toLowerCase();
+    if (!UI.q.toLowerCase().split(/\s+/).every(w => hay.includes(w))) return false;
+  }
+  return true;
+}
+function scopeLabel() {
+  const p = [UI.cat || 'All categories'];
+  if (UI.crit) p.push(UI.crit);
+  if (UI.src) p.push(srcOf({source:UI.src}).lbl);
+  if (UI.q) p.push(`“${UI.q}”`);
+  return p.join(' · ');
+}
+
+/* ---------- Views ---------- */
+function showHome() {
+  UI.trip = null;
+  DB.settings.last = null;
+  persist();
+  closeSheet();
+  $('#trip').hidden = true;
+  $('#home').hidden = false;
+  document.title = 'Holiday Lists';
+  renderHome();
+  window.scrollTo(0, 0);
+}
+
+function openTrip(uid, {push = true, tab} = {}) {
+  const t = getTrip(uid);
+  if (!t) return showHome();
+  if (UI.trip !== t) { resetFilters(); UI.open.clear(); UI.collapsed.clear(); UI.focus.key = ''; }
+  UI.trip = t;
+  $('#home').hidden = true;
+  $('#trip').hidden = false;
+  if (push) history.pushState({v:'trip', uid}, '');
+  setTab(tab || 'dash');
+}
+
+function goHome() {
+  if (history.state && history.state.v === 'trip') history.back();
+  else showHome();
+}
+
+function setTab(tab) {
+  UI.tab = tab;
+  const t = UI.trip;
+  DB.settings.last = {uid: t.uid, tab};
+  persist();
+  $$('.nav button').forEach(b => b.setAttribute('aria-current', b.dataset.v === tab ? 'page' : 'false'));
+  ['dash', 'list', 'focus', 'more'].forEach(k => { $('#tab-' + k).hidden = k !== tab; });
+  const filt = tab === 'list' || tab === 'focus';
+  $('#filters').hidden = !filt;
+  $('#searchBox').hidden = !filt;
+  $('#tripTitle').hidden = filt;
+  renderTitle();
+  if (filt) renderChips();
+  renderTab();
+  window.scrollTo(0, 0);
+  measureHdr();
+}
+
+function renderTab() {
+  if (!UI.trip) return;
+  ({dash:renderDash, list:renderList, focus:renderFocus, more:renderMore})[UI.tab]();
+}
+
+let tabTimer;
+function rerenderSoon(ms = 650) {
+  clearTimeout(tabTimer);
+  tabTimer = setTimeout(renderTab, ms);
+}
+
+function renderTitle() {
+  const t = UI.trip, n = t.items.length, p = countPacked(t);
+  $('#tripTitle').innerHTML = `<b>${h(t.name)}</b><span>${p}/${n} packed</span>`;
+  document.title = `${t.name} · ${p}/${n}`;
+}
+
+function measureHdr() {
+  document.documentElement.style.setProperty('--hdr', $('#tripHdr').offsetHeight + 'px');
+}
+
+/* ---------- Home ---------- */
+function renderHome() {
+  $('#homeList').innerHTML = DB.trips.map(t => {
+    const n = t.items.length, p = countPacked(t), pct = n ? Math.round(p * 100 / n) : 0;
+    const cw = t.items.filter(i => i.criticality === 'Critical' && !isPacked(t, i.id)).length;
+    const cd = countdown(t);
+    return `<button class="card tripcard" data-act="open" data-uid="${h(t.uid)}">
+      <div class="tc-top"><h2>${h(t.name)}</h2>${cd ? `<span class="pill">${cd}</span>` : ''}</div>
+      <p class="muted">${[h(t.sub), dateRange(t)].filter(Boolean).join(' · ') || '&nbsp;'}</p>
+      <span class="pbar" aria-hidden="true"><i style="width:${pct}%"></i></span>
+      <p class="tc-stats"><span>${p}/${n} packed (${pct}%)</span>${cw ? `<span class="crit-txt">▲ ${cw} critical waiting</span>` : (n ? '<span class="ok-txt">✓ Critical items done</span>' : '')}</p>
+    </button>`;
+  }).join('') || '<p class="empty">No trips yet. Create one below.</p>';
+  $('#seedBtn').hidden = DB.trips.some(t => t.uid === SEED_META.uid);
+}
+
+/* ---------- Rows ---------- */
+function detailBody(it) {
+  let s = '';
+  if (it.why_critical) s += `<p class="why"><span class="dl">Why it’s critical</span>${rich(it.why_critical)}</p>`;
+  if (it.notes) s += isWarn(it)
+    ? `<div class="warn" role="note"><span class="dl">⚠ Customs / legal note</span>${rich(it.notes)}</div>`
+    : `<p class="notes"><span class="dl">Notes</span>${rich(it.notes)}</p>`;
+  return s;
+}
+
+function rowHTML(t, it) {
+  const p = isPacked(t, it.id), c = critOf(it), s = srcOf(it), op = UI.open.has(it.id);
+  return `<li class="row${p ? ' done' : ''}${op ? ' open' : ''}${c.cls === 'c' ? ' is-c' : ''}" data-id="${it.id}">
+    <div class="rline">
+      <button class="rmain" data-act="toggle" aria-expanded="${op}" aria-controls="d${it.id}">
+        <span class="crit crit-${c.cls}"><span aria-hidden="true">${c.ic}${c.ab}</span><span class="sr">${c.k}: </span></span>
+        <span class="name">${isWarn(it) ? '<span class="wi" aria-hidden="true">⚠</span> ' : ''}${h(it.item)}</span>
+        <span class="tags">${it.qty ? `<span class="qty">${h(it.qty)}</span>` : ''}<span class="src src-${s.cls}" title="${h(s.k)}">${s.ab}</span></span>
+      </button>
+      <label class="tick"><input type="checkbox" data-act="tick" ${p ? 'checked' : ''} aria-label="Packed: ${h(it.item)}"><span class="box" aria-hidden="true"></span></label>
+    </div>
+    <div class="details" id="d${it.id}" ${op ? '' : 'hidden'}>
+      ${detailBody(it)}
+      <div class="dmeta">${it.qty ? `<span>Qty: <b>${h(it.qty)}</b></span>` : ''}<span>${h(s.k)}</span><span>${h(it.category)}</span></div>
+      <button class="btn sm" data-act="edit">✎ Edit</button>
+    </div>
+  </li>`;
+}
+
+function onTick(id, p, row) {
+  const t = UI.trip;
+  setPacked(t, id, p);
+  if (row) row.classList.toggle('done', p);
+  renderTitle();
+  if (UI.tab === 'list' || UI.tab === 'focus') renderChips();
+  if (UI.tab === 'list') {
+    const g = row && row.closest('.group');
+    if (g) {
+      const its = t.items.filter(i => i.category === g.dataset.cat);
+      g.querySelector('.gcount').textContent = `${countPacked(t, its)}/${its.length}`;
+    }
+    if (UI.st === 'todo' && p) { row.classList.add('leaving'); rerenderSoon(); }
+    else $('#lsum').innerHTML = lsumHTML();
+  }
+  if (UI.tab === 'dash') { if (p && row) row.classList.add('leaving'); rerenderSoon(); }
+}
+
+/* ---------- Filters ---------- */
+function renderChips() {
+  const t = UI.trip, f = $('#fchips'), c = $('#cchips'), fs = f.scrollLeft, cs = c.scrollLeft;
+  const F = [['st','todo','Not packed'], ['crit','Critical','▲ Critical'], ['crit','Important','● Important'], ['crit','Nice to have','◇ Nice to have'],
+    ['src','Need to buy','Need to buy'], ['src','Have at home','Have at home'], ['src','Provided - check with host','Provided by host']];
+  f.innerHTML = F.map(([k, v, l]) => `<button class="chip" data-act="f" data-k="${k}" data-v="${h(v)}" aria-pressed="${UI[k] === v}">${h(l)}</button>`).join('');
+  c.innerHTML = `<button class="chip" data-act="f" data-k="cat" data-v="" aria-pressed="${!UI.cat}">All <span class="n">${countPacked(t)}/${t.items.length}</span></button>` +
+    catOrder(t).map(cat => {
+      const its = t.items.filter(i => i.category === cat), p = countPacked(t, its);
+      return `<button class="chip${p === its.length ? ' chip-done' : ''}" data-act="f" data-k="cat" data-v="${h(cat)}" aria-pressed="${UI.cat === cat}">${h(cat)} <span class="n">${p}/${its.length}</span></button>`;
+    }).join('');
+  f.scrollLeft = fs;
+  c.scrollLeft = cs;
+}
+
+/* ---------- List ---------- */
+function lsumHTML() {
+  const t = UI.trip, all = t.items.length, vis = t.items.filter(it => matches(t, it)).length;
+  return `<span>${filtersActive() ? `Showing <b>${vis}</b> of ${all}` : `<b>${all}</b> items`} · ${countPacked(t)} packed</span>` +
+    (filtersActive() ? '<button class="link" data-act="clearf">Clear filters</button>' : '');
+}
+
+function renderList() {
+  const t = UI.trip, all = sorted(t), vis = all.filter(it => matches(t, it));
+  let html = `<div class="lsum" id="lsum">${lsumHTML()}</div>`;
+  if (!vis.length) html += all.length
+    ? `<div class="empty">Nothing matches.<br><button class="btn block" data-act="clearf">Clear filters</button></div>`
+    : `<div class="empty">This list is empty.</div>`;
+  const groups = new Map();
+  vis.forEach(it => { if (!groups.has(it.category)) groups.set(it.category, []); groups.get(it.category).push(it); });
+  for (const [cat, its] of groups) {
+    const allc = t.items.filter(i => i.category === cat);
+    const col = UI.collapsed.has(cat) && !UI.q;
+    html += `<section class="group" data-cat="${h(cat)}">
+      <h3 class="ghead"><button data-act="collapse" data-cat="${h(cat)}" aria-expanded="${!col}"><span class="gname">${h(cat)}</span><span class="gcount">${countPacked(t, allc)}/${allc.length}</span><span class="chev" aria-hidden="true">▾</span></button></h3>
+      ${col ? '' : `<ul class="rows">${its.map(it => rowHTML(t, it)).join('')}</ul>`}
+    </section>`;
+  }
+  html += `<div class="lfoot"><button class="btn block" data-act="add">＋ Add an item</button></div>`;
+  $('#tab-list').innerHTML = html;
+}
+
+/* ---------- Dashboard ---------- */
+function renderDash() {
+  const t = UI.trip, items = t.items, n = items.length, p = countPacked(t), pct = n ? Math.round(p * 100 / n) : 0;
+  const crit = sorted(t).filter(i => i.criticality === 'Critical' && !isPacked(t, i.id));
+  const left = f => items.filter(i => f(i) && !isPacked(t, i.id)).length;
+  const cd = countdown(t);
+  const stat = (k, v, label, its) => {
+    const pp = countPacked(t, its);
+    return `<button class="stat" data-act="quick" data-k="${k}" data-v="${h(v)}">
+      <span class="slbl">${label}</span><span class="snum">${pp}/${its.length} packed</span>
+      <span class="pbar" aria-hidden="true"><i style="width:${its.length ? pp * 100 / its.length : 0}%"></i></span></button>`;
+  };
+  $('#tab-dash').innerHTML = `
+  <div class="dhead"><h1>${h(t.name)}</h1><p>${[h(t.sub), dateRange(t)].filter(Boolean).join(' · ')}</p>${cd ? `<span class="pill">${cd}</span>` : ''}</div>
+  <section class="card">
+    <div class="big"><span class="pct">${pct}%</span><span><b>${p}</b> of ${n} packed</span></div>
+    <span class="pbar lg" aria-hidden="true"><i style="width:${pct}%"></i></span>
+    <div class="quick">
+      <button class="btn" data-act="quick" data-k="src" data-v="Need to buy"><span>🛒 Need to buy</span><span>${left(i => i.source === 'Need to buy')} left</span></button>
+      <button class="btn" data-act="quick" data-k="crit" data-v="Critical"><span>▲ Critical only</span><span>${left(i => i.criticality === 'Critical')} left</span></button>
+      <button class="btn" data-act="quick" data-k="st" data-v="todo"><span>☐ Not packed yet</span><span>${n - p} left</span></button>
+    </div>
+  </section>
+  <section class="card crit-card">
+    <h2><span class="crit crit-c" aria-hidden="true">▲C</span> Critical still waiting <b>${crit.length}</b></h2>
+    ${crit.length ? `<ul class="rows">${crit.map(it => rowHTML(t, it)).join('')}</ul>` : '<p class="ok">✓ All critical items are packed.</p>'}
+  </section>
+  <section class="card"><h2>By criticality</h2>
+    ${CRIT.map(c => stat('crit', c.k, `<span class="crit crit-${c.cls}" aria-hidden="true">${c.ic}${c.ab}</span> ${c.k}`, items.filter(i => i.criticality === c.k))).join('')}
+  </section>
+  <section class="card"><h2>By source</h2>
+    ${SRC.map(s => stat('src', s.k, `<span class="src src-${s.cls}" aria-hidden="true">${s.ab}</span> ${s.lbl}`, items.filter(i => i.source === s.k))).join('')}
+  </section>
+  <section class="card"><h2>By category</h2>
+    ${catOrder(t).map(cat => stat('cat', cat, h(cat), items.filter(i => i.category === cat))).join('')}
+  </section>`;
+}
+
+/* ---------- Focus mode ---------- */
+const focusKey = () => [UI.trip.uid, UI.q, UI.st, UI.crit, UI.src, UI.cat].join('|');
+function buildFocus() {
+  const t = UI.trip;
+  UI.focus = {key: focusKey(), i: 0, queue: sorted(t).filter(it => matches(t, it) && !isPacked(t, it.id)).map(it => it.id)};
+}
+
+function renderFocus() {
+  const t = UI.trip;
+  if (UI.focus.key !== focusKey()) buildFocus();
+  const F = UI.focus, q = F.queue, el = $('#tab-focus'), scope = scopeLabel();
+  if (F.i >= q.length) {
+    const rem = sorted(t).filter(it => matches(t, it) && !isPacked(t, it.id)).length;
+    el.innerHTML = `<div class="fwrap"><div class="card fend">
+      <div class="big-ic" aria-hidden="true">${rem ? '👍' : '🎉'}</div>
+      <h2 style="justify-content:center">${rem ? 'End of this run' : 'Everything here is packed'}</h2>
+      <p>${rem ? `${plural(rem, 'item')} still not packed in <b>${h(scope)}</b>.` : `Nothing left in <b>${h(scope)}</b>.`}</p>
+      ${rem ? '<button class="btn primary block" data-act="frestart">Go through the skipped items</button>' : ''}
+      ${F.i > 0 ? '<button class="btn block" data-act="fback">‹ Back to the last item</button>' : ''}
+      <button class="btn block" data-act="tab" data-v="list">Open the list</button>
+    </div></div>`;
+    return;
+  }
+  const it = itemById(t, q[F.i]);
+  if (!it) { q.splice(F.i, 1); return renderFocus(); }
+  const p = isPacked(t, it.id), c = critOf(it), s = srcOf(it);
+  el.innerHTML = `<div class="fwrap">
+    <div class="fprog"><span><b>${F.i + 1}</b> of ${q.length}</span><span class="fscope">${h(scope)}</span></div>
+    <span class="pbar" aria-hidden="true"><i style="width:${F.i * 100 / q.length}%"></i></span>
+    <article class="fcard${p ? ' is-packed' : ''}" id="fcard" aria-live="polite">
+      <div class="fcat">${h(it.category)}</div>
+      <div class="fbadges"><span class="crit crit-${c.cls} lg">${c.ic} ${c.k}</span><span class="src src-${s.cls}">${h(s.lbl)}</span>${p ? '<span class="pill ok">✓ Packed</span>' : ''}</div>
+      <h2>${isWarn(it) ? '<span class="wi" aria-hidden="true">⚠</span> ' : ''}${h(it.item)}</h2>
+      ${it.qty ? `<p class="fqty">Qty: <b>${h(it.qty)}</b></p>` : ''}
+      ${detailBody(it)}
+      <p class="hint">Swipe right = Done · Swipe left = Skip</p>
+    </article>
+    <div class="factions">
+      <button class="btn" data-act="fback" ${F.i === 0 ? 'disabled' : ''}>‹ Back</button>
+      <button class="btn" data-act="fskip">Skip</button>
+      <button class="btn primary" data-act="fdone">${p ? 'Unpack' : 'Done ✓'}</button>
+    </div>
+  </div>`;
+  bindSwipe($('#fcard'));
+}
+
+function focusDone() {
+  const t = UI.trip, F = UI.focus, id = F.queue[F.i];
+  if (id == null) return;
+  if (isPacked(t, id)) { setPacked(t, id, false); }
+  else { setPacked(t, id, true); F.i++; }
+  renderTitle(); renderChips(); renderFocus();
+}
+function focusSkip() { if (UI.focus.i < UI.focus.queue.length) { UI.focus.i++; renderFocus(); } }
+function focusBack() { if (UI.focus.i > 0) { UI.focus.i--; renderFocus(); } }
+
+function bindSwipe(card) {
+  let x0 = null, y0 = 0, dx = 0, horiz = false;
+  card.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    x0 = e.clientX; y0 = e.clientY; dx = 0; horiz = false;
+    card.style.transition = 'none';
+  });
+  card.addEventListener('pointermove', e => {
+    if (x0 === null) return;
+    dx = e.clientX - x0;
+    const dy = e.clientY - y0;
+    if (!horiz) {
+      if (Math.abs(dy) > 12 && Math.abs(dy) > Math.abs(dx)) { x0 = null; card.style.transition = ''; return; }
+      if (Math.abs(dx) > 12) { horiz = true; try { card.setPointerCapture(e.pointerId); } catch (_) {} }
+    }
+    if (horiz) {
+      card.style.transform = `translateX(${dx}px) rotate(${dx / 30}deg)`;
+      card.dataset.hint = dx > 60 ? 'done' : dx < -60 ? 'skip' : '';
+    }
+  });
+  const end = () => {
+    if (x0 === null) return;
+    x0 = null;
+    card.style.transition = '';
+    delete card.dataset.hint;
+    if (horiz && Math.abs(dx) > 90) {
+      card.style.transform = `translateX(${dx > 0 ? 120 : -120}%)`;
+      card.style.opacity = '0';
+      setTimeout(dx > 0 ? focusDone : focusSkip, 160);
+    } else card.style.transform = '';
+  };
+  card.addEventListener('pointerup', end);
+  card.addEventListener('pointercancel', end);
+}
+
+/* ---------- More tab ---------- */
+const hosted = () => /^https?:$/.test(location.protocol);
+const baseURL = () => location.origin + location.pathname;
+
+function swStatus() {
+  if (!hosted()) return 'Offline mode needs the app to be hosted online first (see the setup guide).';
+  if (!('serviceWorker' in navigator)) return 'This browser can’t keep an offline copy.';
+  return navigator.serviceWorker.controller ? '✓ Offline ready: this app opens without signal.' : 'Offline copy is being saved. Open the app once more while online to finish.';
+}
+
+function renderMore() {
+  const t = UI.trip;
+  $('#tab-more').innerHTML = `
+  <section class="card"><h2>Share this list</h2>
+    <p>Creates a link that holds the whole list. Anyone who opens it can add their own copy. No account needed.</p>
+    ${hosted() ? '' : '<p class="note warnish">You’re opening the app from a file on this device. Put it online first (see the guide) so links open on other phones.</p>'}
+    <label class="check"><input type="checkbox" id="shTicks" checked> Include my ticks</label>
+    <button class="btn primary block" data-act="mkshare">Create share link</button>
+    <div id="shOut"></div>
+  </section>
+  <section class="card"><h2>Sync ticks with family</h2>
+    <div class="note"><b>Ticks are saved on this phone only.</b> There is no server, so another phone won’t see your progress automatically. To combine progress, one person taps <i>Send my ticks</i> and the other taps <i>Import ticks</i> and pastes it in. For each item, the most recent change wins, including un-ticks.</div>
+    <label for="dev">This device’s name (shown to the other person)</label>
+    <input id="dev" placeholder="e.g. Rashed’s phone" value="${h(DB.settings.device)}" autocomplete="off">
+    <div class="row2"><button class="btn primary" data-act="mkstatus">Send my ticks</button><button class="btn" data-act="impstatus">Import ticks</button></div>
+    <div id="stOut"></div>
+  </section>
+  <section class="card"><h2>Edit</h2>
+    <p class="small">To change or delete an item, open it in the List and tap ✎ Edit.</p>
+    <button class="btn block" data-act="add">＋ Add an item</button>
+    <button class="btn block" data-act="tripinfo">Rename trip / change dates</button>
+    <button class="btn block" data-act="csv">Download this list as CSV</button>
+  </section>
+  <section class="card"><h2>Appearance</h2>
+    <div class="seg" role="radiogroup" aria-label="Theme">${['system', 'light', 'dark'].map(v =>
+      `<button role="radio" aria-checked="${DB.settings.theme === v}" data-act="settheme" data-v="${v}">${{system:'Follow phone', light:'Light', dark:'Dark'}[v]}</button>`).join('')}</div>
+  </section>
+  <section class="card"><h2>Reset</h2>
+    <button class="btn block" data-act="untick">Untick everything</button>
+    <button class="btn block danger" data-act="restore">Restore the original list</button>
+    <button class="btn block danger" data-act="deltrip">Delete this trip from this phone</button>
+  </section>
+  <section class="card"><h2>About</h2>
+    <p class="small">${swStatus()}</p>
+    <p class="small">Everything is stored in this browser. Clearing website data for this site erases it, so send your ticks to someone first. On iPhone, the Home Screen app and Safari keep <b>separate</b> copies.</p>
+  </section>`;
+  $('#dev').addEventListener('input', e => { DB.settings.device = e.target.value.trim(); persist(); });
+}
+
+function showOut(sel, text, title, msg) {
+  const box = $(sel);
+  box.innerHTML = `<textarea readonly class="out" rows="4" aria-label="${h(title)}">${h(text)}</textarea>
+    <div class="row2"><button class="btn" data-act="copyout">Copy</button>${navigator.share ? '<button class="btn primary" data-act="shareout">Share…</button>' : ''}</div>`;
+  box._payload = {text, title, msg};
+}
+
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); toast('Copied'); return; } catch (e) {}
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;opacity:0';
+  document.body.append(ta); ta.select();
+  try { document.execCommand('copy'); toast('Copied'); } catch (e) { toast('Select the text and copy it manually'); }
+  ta.remove();
+}
+
+/* ---------- Share links & sync codes ---------- */
+function b64u(bytes) {
+  let s = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+function unb64u(str) {
+  str = str.replace(/-/g, '+').replace(/_/g, '/');
+  while (str.length % 4) str += '=';
+  const s = atob(str), b = new Uint8Array(s.length);
+  for (let i = 0; i < s.length; i++) b[i] = s.charCodeAt(i);
+  return b;
+}
+async function pack(obj) {
+  const bytes = new TextEncoder().encode(JSON.stringify(obj));
+  if (window.CompressionStream) {
+    try {
+      const out = await new Response(new Blob([bytes]).stream().pipeThrough(new CompressionStream('deflate-raw'))).arrayBuffer();
+      return 'z' + b64u(new Uint8Array(out));
+    } catch (e) {}
+  }
+  return 'j' + b64u(bytes);
+}
+async function unpack(str) {
+  const bytes = unb64u(str.slice(1));
+  if (str[0] === 'z') return JSON.parse(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).text());
+  if (str[0] === 'j') return JSON.parse(new TextDecoder().decode(bytes));
+  throw new Error('bad code');
+}
+
+function tripPayload(t, ticks) {
+  const c = catOrder(t), s = {};
+  if (ticks) for (const [id, v] of Object.entries(t.state)) s[id] = [v.p, v.t];
+  return {k:'t', u:t.uid, n:t.name, sub:t.sub, st:t.start, en:t.end, d:DB.settings.device, c,
+    i: t.items.map(it => [it.id, c.indexOf(it.category), it.item, it.qty, it.source, it.criticality, it.why_critical, it.notes, it.sort_order]),
+    s: ticks ? s : null};
+}
+
+async function statusPayload(t) {
+  const s = {};
+  for (const [id, v] of Object.entries(t.state)) if (v.t) s[id] = [v.p, v.t];
+  return 'HLS1.' + await pack({k:'s', u:t.uid, n:t.name, d:DB.settings.device, at:Date.now(), s});
+}
+
+async function readCode(raw) {
+  const s = clean(raw).replace(/\s+/g, '');
+  let m;
+  try {
+    if ((m = s.match(/#t=([\w-]+)/))) {
+      const d = await unpack(m[1]);
+      if (d.k === 't' && Array.isArray(d.i) && Array.isArray(d.c)) return {kind:'trip', data:d};
+    } else if ((m = s.match(/#s=([\w-]+)/)) || (m = s.match(/HLS1\.([\w-]+)/))) {
+      const d = await unpack(m[1]);
+      if (d.k === 's' && d.s) return {kind:'status', data:d};
+    }
+  } catch (e) {}
+  return null;
+}
+
+function tripFromPayload(d) {
+  const rows = d.i.map(a => ({id:a[0], category:d.c[a[1]], item:a[2], qty:a[3], source:a[4], criticality:a[5], why_critical:a[6], notes:a[7], sort_order:a[8]}));
+  const t = newTrip({uid:d.u, name:d.n, sub:d.sub, start:d.st, end:d.en}, rows, false);
+  if (d.s) for (const [id, [p, ts]] of Object.entries(d.s)) t.state[id] = {p, t:ts};
+  return t;
+}
+
+function diffStatus(t, d) {
+  const apply = [], ids = new Set(t.items.map(i => i.id));
+  let on = 0, off = 0, missing = 0;
+  const names = [];
+  for (const [id, [p, ts]] of Object.entries(d.s)) {
+    if (!ids.has(+id)) { if (p) missing++; continue; }
+    const cur = t.state[id];
+    if (ts > (cur ? cur.t : 0)) {
+      apply.push([id, p, ts]);
+      if (p !== (cur ? cur.p : 0)) { p ? on++ : off++; names.push((p ? '✓ ' : '☐ ') + itemById(t, id).item); }
+    }
+  }
+  return {apply, on, off, missing, names};
+}
+
+function importTripSheet(d) {
+  const exists = getTrip(d.u), ticks = d.s ? Object.values(d.s).filter(v => v[0]).length : 0;
+  openSheet('Add a shared list', `
+    <p><b>${h(d.n)}</b>${d.sub ? ' · ' + h(d.sub) : ''}<br>${plural(d.i.length, 'item')} in ${plural(d.c.length, 'category').replace('categorys', 'categories')}${d.s ? ` · ${plural(ticks, 'item')} ticked${d.d ? ' on ' + h(d.d) : ''}` : ''}.</p>
+    ${exists ? `<p class="note">This list is already on this phone (“${h(exists.name)}”).</p>
+      <button class="btn primary block" id="tUpd">Update my copy and merge ticks</button>
+      <button class="btn block" id="tCopy">Add as a separate copy</button>`
+    : '<button class="btn primary block" id="tAdd">Add to this phone</button>'}
+    <button class="btn block" data-act="closesheet">Cancel</button>`, () => {
+    const add = asCopy => {
+      const t = tripFromPayload(d);
+      if (asCopy) { t.uid = newUid(); t.name += ' (copy)'; }
+      DB.trips.push(t); persist(); closeSheet();
+      toast(`Added “${t.name}”`);
+      openTrip(t.uid);
+    };
+    if ($('#tAdd')) $('#tAdd').onclick = () => add(false);
+    if ($('#tCopy')) $('#tCopy').onclick = () => add(true);
+    if ($('#tUpd')) $('#tUpd').onclick = () => {
+      const inc = tripFromPayload(d);
+      exists.items = inc.items;
+      Object.assign(exists, {name:inc.name, sub:inc.sub, start:inc.start, end:inc.end});
+      let n = 0;
+      for (const [id, v] of Object.entries(inc.state)) {
+        const cur = exists.state[id];
+        if (!cur || v.t > cur.t) { exists.state[id] = v; n++; }
+      }
+      persist(); closeSheet();
+      toast(`Updated “${exists.name}” · ${plural(n, 'tick')} merged`);
+      if (UI.trip === exists) { resetFilters(); setTab(UI.tab); } else openTrip(exists.uid);
+    };
+  });
+}
+
+function statusSheet(d) {
+  let t = getTrip(d.u), other = false;
+  if (!t && UI.trip) { t = UI.trip; other = true; }
+  if (!t) {
+    openSheet('Import ticks', `<p>These ticks belong to “${h(d.n)}”, which isn’t on this phone yet. Ask for that list’s share link first.</p><button class="btn block" data-act="closesheet">OK</button>`);
+    return;
+  }
+  const df = diffStatus(t, d);
+  openSheet('Import ticks', `
+    <p>From <b>${h(d.d || 'another device')}</b>, sent ${fmtWhen(d.at)}, for <b>${h(t.name)}</b>.</p>
+    ${other ? `<p class="note warnish">This code came from a different list (“${h(d.n)}”). Items will be matched by their id number.</p>` : ''}
+    ${df.apply.length ? `<ul class="difflist"><li><b>${df.on}</b> will become packed</li><li><b>${df.off}</b> will become unpacked</li></ul>
+      ${df.names.length ? `<details><summary>See which items</summary><ul class="difflist">${df.names.map(n => `<li>${h(n)}</li>`).join('')}</ul></details>` : ''}
+      <button class="btn primary block" id="sApply">Merge these ticks</button>`
+    : '<p class="ok">✓ Already up to date. Nothing to change.</p>'}
+    ${df.missing ? `<p class="small">${plural(df.missing, 'ticked item')} aren’t in your list and will be ignored.</p>` : ''}
+    <button class="btn block" data-act="closesheet">${df.apply.length ? 'Cancel' : 'Close'}</button>`, () => {
+    const b = $('#sApply');
+    if (b) b.onclick = () => {
+      df.apply.forEach(([id, p, ts]) => { t.state[id] = {p, t:ts}; });
+      persist(); closeSheet();
+      toast(`Merged: ${df.on} packed, ${df.off} unpacked`);
+      if (UI.trip === t) { renderTitle(); if (!$('#filters').hidden) renderChips(); UI.focus.key = ''; renderTab(); }
+      else openTrip(t.uid);
+    };
+  });
+}
+
+function pasteSheet(title, intro) {
+  openSheet(title, `<p>${intro}</p>
+    <textarea id="pTxt" rows="5" aria-label="Link or code" placeholder="Paste here"></textarea>
+    <button class="btn primary block" id="pGo">Continue</button>
+    <p id="pMsg" class="crit-txt" role="status"></p>`, () => {
+    $('#pGo').onclick = async () => {
+      const r = await readCode($('#pTxt').value);
+      if (!r) { $('#pMsg').textContent = 'That link or code couldn’t be read. Make sure you copied all of it.'; return; }
+      r.kind === 'trip' ? importTripSheet(r.data) : statusSheet(r.data);
+    };
+  });
+}
+
+/* ---------- CSV ---------- */
+function parseCSV(text) {
+  text = text.replace(/^﻿/, '');
+  const rows = [];
+  let row = [], f = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) {
+      if (c === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; }
+      else f += c;
+    } else if (c === '"') q = true;
+    else if (c === ',') { row.push(f); f = ''; }
+    else if (c === '\n' || c === '\r') {
+      if (c === '\r' && text[i + 1] === '\n') i++;
+      row.push(f); rows.push(row); row = []; f = '';
+    } else f += c;
+  }
+  if (f !== '' || row.length) { row.push(f); rows.push(row); }
+  return rows.filter(r => r.some(x => x.trim() !== ''));
+}
+
+function rowsFromCSV(text) {
+  const rows = parseCSV(text);
+  if (rows.length < 2) return {error:'That file has no rows to import.'};
+  const head = rows[0].map(x => x.trim().toLowerCase().replace(/[\s-]+/g, '_'));
+  if (!head.includes('item')) return {error:`No “item” column found. Columns seen: ${head.join(', ') || 'none'}.`};
+  return {rows: rows.slice(1).map(r => Object.fromEntries(head.map((k, i) => [k, r[i] ?? ''])))};
+}
+
+const csvCell = v => /[",\r\n]/.test(String(v)) ? `"${String(v).replace(/"/g, '""')}"` : String(v);
+function toCSV(t) {
+  return '﻿' + [COLS.join(','), ...sorted(t).map(it => COLS.map(k => csvCell(k === 'packed' ? (isPacked(t, it.id) ? 'yes' : 'no') : it[k])).join(','))].join('\r\n');
+}
+function download(name, text) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], {type:'text/csv'}));
+  a.download = name;
+  document.body.append(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
+const fileName = s => (s.replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '_') || 'list') + '.csv';
+const TEMPLATE = COLS.join(',') + '\r\n' +
+  '1,Documents,Passports,4,Have at home,Critical,Can\'t travel without them,Check expiry dates,no,1\r\n' +
+  '2,Toiletries,Sun cream SPF50,2 bottles,Need to buy,Important,,,no,1\r\n';
+
+/* ---------- Sheets: new trip, trip info, item editor ---------- */
+const sheet = $('#sheet');
+function openSheet(title, body, mount) {
+  sheet.innerHTML = `<div class="sheet-h"><h2 id="sheetTitle">${h(title)}</h2><button class="iconbtn" data-act="closesheet" aria-label="Close">✕</button></div><div class="sheet-b">${body}</div>`;
+  if (!sheet.open) sheet.showModal();
+  sheet.scrollTop = 0;
+  if (mount) mount();
+}
+function closeSheet() { if (sheet.open) sheet.close(); }
+sheet.addEventListener('click', e => { if (e.target === sheet) closeSheet(); });
+
+function newTripSheet() {
+  const others = DB.trips;
+  openSheet('New trip', `
+    <label for="n_name">Trip name *</label><input id="n_name" placeholder="e.g. Lisbon, Easter 2027" autocomplete="off">
+    <label for="n_sub">Details (optional)</label><input id="n_sub" placeholder="e.g. LGW → LIS · Airbnb · 5 nights" autocomplete="off">
+    <div class="row2"><div><label for="n_s">First day</label><input type="date" id="n_s"></div><div><label for="n_e">Last day</label><input type="date" id="n_e"></div></div>
+    <p id="n_msg" class="crit-txt" role="status"></p>
+    <h3>How do you want to start?</h3>
+    <button class="btn primary block" id="n_csv">Upload a CSV file</button>
+    <input type="file" id="n_file" accept=".csv,text/csv,text/plain" hidden>
+    <p class="small">Same columns as the Barbados list: ${COLS.join(', ')}. Only <b>item</b> is required. <button class="link" id="n_tpl">Download a template</button></p>
+    ${others.length ? `<label for="n_from">Or reuse another trip’s items (all unticked)</label>
+      <select id="n_from">${others.map(t => `<option value="${h(t.uid)}">${h(t.name)} (${t.items.length} items)</option>`).join('')}</select>
+      <button class="btn block" id="n_dup">Copy those items</button>` : ''}
+    <button class="btn block" id="n_blank">Start with an empty list</button>`, () => {
+    const meta = () => ({name:clean($('#n_name').value), sub:clean($('#n_sub').value), start:$('#n_s').value, end:$('#n_e').value});
+    const need = () => {
+      const m = meta();
+      if (!m.name) { $('#n_msg').textContent = 'Give the trip a name first.'; $('#n_name').focus(); return null; }
+      return m;
+    };
+    const create = (m, rows, note) => {
+      const t = newTrip(m, rows, false);
+      DB.trips.push(t); persist(); closeSheet();
+      toast(note || `Created “${t.name}”`);
+      openTrip(t.uid, {tab: t.items.length ? 'dash' : 'list'});
+    };
+    $('#n_tpl').onclick = () => download('holiday_list_template.csv', TEMPLATE);
+    $('#n_csv').onclick = () => { if (need()) $('#n_file').click(); };
+    $('#n_file').onchange = async e => {
+      const f = e.target.files[0], m = need();
+      if (!f || !m) return;
+      const res = rowsFromCSV(await f.text());
+      e.target.value = '';
+      if (res.error) { $('#n_msg').textContent = res.error; return; }
+      const count = normItems(res.rows).length;
+      if (!count) { $('#n_msg').textContent = 'No rows with an item name were found.'; return; }
+      const skipped = res.rows.length - count;
+      create(m, res.rows, `Imported ${plural(count, 'item')}` + (skipped ? ` (${skipped} empty rows skipped)` : ''));
+    };
+    if ($('#n_dup')) $('#n_dup').onclick = () => {
+      const m = need(), src = getTrip($('#n_from').value);
+      if (m && src) create(m, src.items.map(it => ({...it, packed:'no'})), `Copied ${plural(src.items.length, 'item')} from ${src.name}`);
+    };
+    $('#n_blank').onclick = () => { const m = need(); if (m) create(m, []); };
+  });
+}
+
+function tripInfoSheet() {
+  const t = UI.trip;
+  openSheet('Trip details', `
+    <label for="i_name">Trip name</label><input id="i_name" value="${h(t.name)}">
+    <label for="i_sub">Details</label><input id="i_sub" value="${h(t.sub)}">
+    <div class="row2"><div><label for="i_s">First day</label><input type="date" id="i_s" value="${h(t.start)}"></div><div><label for="i_e">Last day</label><input type="date" id="i_e" value="${h(t.end)}"></div></div>
+    <button class="btn primary block" id="i_save">Save</button>`, () => {
+    $('#i_save').onclick = () => {
+      t.name = clean($('#i_name').value) || t.name;
+      t.sub = clean($('#i_sub').value);
+      t.start = $('#i_s').value; t.end = $('#i_e').value;
+      persist(); closeSheet(); renderTitle(); renderTab(); toast('Saved');
+    };
+  });
+}
+
+function editItem(id) {
+  const t = UI.trip, it = id != null ? itemById(t, id) : null, cats = catOrder(t);
+  const opts = (list, cur) => (list.some(o => o.k === cur) ? '' : `<option>${h(cur)}</option>`) +
+    list.map(o => `<option value="${h(o.k)}" ${o.k === cur ? 'selected' : ''}>${h(o.k)}</option>`).join('');
+  openSheet(it ? 'Edit item' : 'Add an item', `<form id="ef">
+    <label for="e_item">Item *</label><textarea id="e_item" rows="2">${h(it?.item)}</textarea>
+    <label for="e_cat">Category</label><input id="e_cat" list="e_cats" value="${h(it?.category || UI.cat || cats[0] || '')}" autocomplete="off">
+    <datalist id="e_cats">${cats.map(c => `<option value="${h(c)}">`).join('')}</datalist>
+    <label for="e_qty">Quantity</label><input id="e_qty" value="${h(it?.qty)}" autocomplete="off">
+    <div class="row2" style="margin:0">
+      <div><label for="e_src">Source</label><select id="e_src">${opts(SRC, it?.source || 'Have at home')}</select></div>
+      <div><label for="e_crit">Criticality</label><select id="e_crit">${opts(CRIT, it?.criticality || 'Important')}</select></div>
+    </div>
+    <label for="e_why">Why it’s critical</label><textarea id="e_why" rows="2">${h(it?.why_critical)}</textarea>
+    <label for="e_notes">Notes</label><textarea id="e_notes" rows="3">${h(it?.notes)}</textarea>
+    <label class="check"><input type="checkbox" id="e_p" ${it && isPacked(t, it.id) ? 'checked' : ''}> Packed</label>
+    <p id="e_msg" class="crit-txt" role="status"></p>
+    <div class="row2"><button type="submit" class="btn primary">${it ? 'Save' : 'Add item'}</button>${it ? '<button type="button" class="btn danger" id="e_del">Delete</button>' : '<button type="button" class="btn" data-act="closesheet">Cancel</button>'}</div>
+  </form>`, () => {
+    $('#ef').onsubmit = e => {
+      e.preventDefault();
+      const v = {item:clean($('#e_item').value), category:clean($('#e_cat').value) || 'General', qty:clean($('#e_qty').value),
+        source:$('#e_src').value, criticality:$('#e_crit').value, why_critical:clean($('#e_why').value), notes:clean($('#e_notes').value)};
+      if (!v.item) { $('#e_msg').textContent = 'The item needs a name.'; $('#e_item').focus(); return; }
+      let target = it;
+      if (it) {
+        if (it.category !== v.category) it.sort_order = maxSort(t, v.category, it.id) + 1;
+        Object.assign(it, v);
+      } else {
+        target = {id: Math.max(0, ...t.items.map(i => i.id)) + 1, ...v, sort_order: maxSort(t, v.category) + 1};
+        t.items.push(target);
+      }
+      const want = $('#e_p').checked;
+      if (want !== isPacked(t, target.id)) setPacked(t, target.id, want);
+      persist(); closeSheet();
+      toast(it ? 'Saved' : `Added to ${v.category}`);
+      UI.focus.key = '';
+      renderTitle(); if (!$('#filters').hidden) renderChips(); renderTab();
+    };
+    if ($('#e_del')) $('#e_del').onclick = () => {
+      const idx = t.items.indexOf(it), st = t.state[it.id];
+      t.items.splice(idx, 1);
+      delete t.state[it.id];
+      UI.open.delete(it.id);
+      persist(); closeSheet();
+      const refresh = () => { UI.focus.key = ''; renderTitle(); if (!$('#filters').hidden) renderChips(); renderTab(); };
+      refresh();
+      toast(`Deleted “${it.item.slice(0, 28)}${it.item.length > 28 ? '…' : ''}”`, 'Undo', () => {
+        t.items.splice(idx, 0, it);
+        if (st) t.state[it.id] = st;
+        persist(); refresh();
+      });
+    };
+  });
+}
+
+/* ---------- Toast & theme ---------- */
+let toastTimer;
+function toast(msg, label, fn, ms = 2600) {
+  const el = $('#toast');
+  el.innerHTML = `<span>${h(msg)}</span>${label ? `<button class="tbtn">${h(label)}</button>` : ''}`;
+  el.hidden = false;
+  if (label) el.querySelector('.tbtn').onclick = () => { el.hidden = true; fn(); };
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.hidden = true; }, label ? Math.max(ms, 7000) : ms);
+}
+
+const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+function applyTheme() {
+  const v = DB.settings.theme, r = document.documentElement;
+  if (v === 'system') delete r.dataset.theme; else r.dataset.theme = v;
+  const dark = v === 'dark' || (v === 'system' && darkMQ.matches);
+  $('#themeColor').content = dark ? '#0f1216' : '#f6f7f9';
+}
+darkMQ.addEventListener && darkMQ.addEventListener('change', applyTheme);
+
+/* ---------- Actions (event delegation) ---------- */
+const ACT = {
+  toggle(b, id) {
+    const row = b.closest('.row'), open = !UI.open.has(id);
+    open ? UI.open.add(id) : UI.open.delete(id);
+    row.classList.toggle('open', open);
+    b.setAttribute('aria-expanded', open);
+    row.querySelector('.details').hidden = !open;
+  },
+  collapse(b) { const c = b.dataset.cat; UI.collapsed.has(c) ? UI.collapsed.delete(c) : UI.collapsed.add(c); renderList(); },
+  f(b) {
+    const k = b.dataset.k, v = b.dataset.v;
+    if (k === 'cat') UI.cat = v; else UI[k] = UI[k] === v ? '' : v;
+    renderChips();
+    if (k === 'cat') { const p = $('#cchips [aria-pressed="true"]'); if (p) p.scrollIntoView({inline:'center', block:'nearest'}); }
+    renderTab();
+    window.scrollTo(0, 0);
+  },
+  clearf() { resetFilters(); renderChips(); renderTab(); },
+  tab(b) { setTab(b.dataset.v); },
+  quick(b) { resetFilters(); UI[b.dataset.k] = b.dataset.v; setTab('list'); },
+  back: goHome,
+  open(b) { openTrip(b.dataset.uid); },
+  add() { editItem(null); },
+  edit(b, id) { editItem(id); },
+  newtrip: newTripSheet,
+  paste() { pasteSheet('Paste a link or code', 'Paste a list link (adds a trip) or a ticks code (merges progress). Tip: if you use the Home Screen app, paste links here rather than opening them in the browser.'); },
+  seed() { DB.trips.unshift(newTrip(SEED_META, SEED, true)); persist(); renderHome(); },
+  theme() {
+    const order = ['system', 'light', 'dark'];
+    DB.settings.theme = order[(order.indexOf(DB.settings.theme) + 1) % 3];
+    persist(); applyTheme();
+    toast({system:'Theme: follow phone', light:'Theme: light', dark:'Theme: dark'}[DB.settings.theme]);
+  },
+  settheme(b) { DB.settings.theme = b.dataset.v; persist(); applyTheme(); renderMore(); },
+  fdone: focusDone, fskip: focusSkip, fback: focusBack,
+  frestart() { UI.focus.key = ''; renderFocus(); },
+  closesheet: closeSheet,
+  async mkshare() {
+    const t = UI.trip, url = baseURL() + '#t=' + await pack(tripPayload(t, $('#shTicks').checked));
+    showOut('#shOut', url, `${t.name} list`, `Our ${t.name} packing list. Open the link and tap “Add to this phone”.`);
+  },
+  async mkstatus() {
+    const t = UI.trip, code = await statusPayload(t);
+    showOut('#stOut', code, `${t.name} ticks`, `Ticks for ${t.name}${DB.settings.device ? ' from ' + DB.settings.device : ''}. In Holiday Lists: open the trip › More › Import ticks › paste this code:`);
+  },
+  impstatus() { pasteSheet('Import ticks', 'Paste the ticks code (or link) someone sent you.'); },
+  copyout(b) { copyText(b.closest('[id]')._payload.text); },
+  shareout(b) {
+    const {text, title, msg} = b.closest('[id]')._payload;
+    navigator.share(text.startsWith('http') ? {title, text:msg, url:text} : {title, text:msg + '\n\n' + text}).catch(() => {});
+  },
+  tripinfo: tripInfoSheet,
+  csv() { download(fileName(UI.trip.name), toCSV(UI.trip)); },
+  untick() {
+    const t = UI.trip;
+    if (!confirm(`Untick all ${countPacked(t)} packed items in “${t.name}”?\n\nIf you later send your ticks, the other phone will be unticked too.`)) return;
+    const now = Date.now();
+    t.items.forEach(it => { if (isPacked(t, it.id)) t.state[it.id] = {p:0, t:now}; });
+    persist(); UI.focus.key = ''; renderTitle(); toast('Everything unticked');
+  },
+  restore() {
+    const t = UI.trip;
+    if (!confirm(`Restore “${t.name}” to its original list?\n\nThis removes your added/edited items and clears all ticks on this phone.`)) return;
+    Object.assign(t, originalOf(t));
+    persist(); UI.open.clear(); UI.focus.key = ''; renderTitle(); toast('Original list restored');
+  },
+  deltrip() {
+    const t = UI.trip;
+    if (!confirm(`Delete “${t.name}” from this phone?\n\nThis can’t be undone. Other phones keep their copies.`)) return;
+    DB.trips.splice(DB.trips.indexOf(t), 1);
+    persist(); showHome(); toast(`Deleted “${t.name}”`);
+  }
+};
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]');
+  if (!b || b.tagName === 'INPUT' || b.disabled) return;
+  const row = b.closest('.row');
+  const fn = ACT[b.dataset.act];
+  if (fn) fn(b, row ? +row.dataset.id : null, e);
+});
+document.addEventListener('change', e => {
+  if (e.target.dataset.act === 'tick') {
+    const row = e.target.closest('.row');
+    onTick(+row.dataset.id, e.target.checked, row);
+  }
+});
+document.addEventListener('keydown', e => {
+  if (UI.tab !== 'focus' || !UI.trip || sheet.open || /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
+  if (e.key === 'ArrowRight') focusDone();
+  else if (e.key === 'ArrowLeft') focusSkip();
+});
+
+let qTimer;
+$('#q').addEventListener('input', e => {
+  $('#qx').hidden = !e.target.value;
+  clearTimeout(qTimer);
+  qTimer = setTimeout(() => { UI.q = e.target.value.trim(); renderTab(); }, 150);
+});
+$('#q').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); });
+$('#qx').addEventListener('click', () => { $('#q').value = ''; UI.q = ''; $('#qx').hidden = true; renderTab(); $('#q').focus(); });
+
+window.addEventListener('popstate', e => {
+  if (e.state && e.state.v === 'trip' && getTrip(e.state.uid)) openTrip(e.state.uid, {push:false, tab:UI.trip ? UI.tab : undefined});
+  else showHome();
+});
+if (window.ResizeObserver) new ResizeObserver(measureHdr).observe($('#tripHdr'));
+
+/* ---------- PWA: generated icons + manifest, and the offline service worker (sw.js) ---------- */
+function makeIcon(size) {
+  const c = document.createElement('canvas');
+  c.width = c.height = size;
+  const x = c.getContext('2d'), s = size;
+  const rr = (X, Y, W, H, R) => { x.beginPath(); if (x.roundRect) x.roundRect(X, Y, W, H, R); else x.rect(X, Y, W, H); };
+  x.fillStyle = '#0b63c4'; x.fillRect(0, 0, s, s);
+  x.strokeStyle = '#fff'; x.lineWidth = s * .05;
+  rr(s * .38, s * .2, s * .24, s * .18, s * .04); x.stroke();
+  x.fillStyle = '#fff'; rr(s * .2, s * .32, s * .6, s * .46, s * .07); x.fill();
+  x.strokeStyle = '#0b63c4'; x.lineWidth = s * .065; x.lineCap = 'round'; x.lineJoin = 'round';
+  x.beginPath(); x.moveTo(s * .35, s * .55); x.lineTo(s * .46, s * .66); x.lineTo(s * .66, s * .45); x.stroke();
+  return c.toDataURL('image/png');
+}
+function setupPWA() {
+  try {
+    const apple = document.createElement('link');
+    apple.rel = 'apple-touch-icon'; apple.href = makeIcon(180);
+    document.head.append(apple);
+    if (hosted()) {
+      const base = new URL('./', location.href).href;
+      const manifest = {name:'Holiday Lists', short_name:'Holiday', start_url:base, scope:base, display:'standalone',
+        background_color:'#0f1216', theme_color:'#0b63c4',
+        icons:[{src:makeIcon(192), sizes:'192x192', type:'image/png'}, {src:makeIcon(512), sizes:'512x512', type:'image/png', purpose:'any maskable'}]};
+      const link = document.createElement('link');
+      link.rel = 'manifest';
+      link.href = 'data:application/manifest+json,' + encodeURIComponent(JSON.stringify(manifest));
+      document.head.append(link);
+    }
+  } catch (e) {}
+  if (hosted() && 'serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+/* ---------- Boot ---------- */
+applyTheme();
+setupPWA();
+const bootHash = location.hash;
+history.replaceState({v:'home'}, '', location.pathname + location.search);
+const last = DB.settings.last;
+if (last && getTrip(last.uid)) openTrip(last.uid, {tab:last.tab}); else showHome();
+if (bootHash.startsWith('#t=') || bootHash.startsWith('#s=')) {
+  readCode(bootHash).then(r => {
+    if (!r) return toast('That link couldn’t be read. Ask for it to be sent again.', null, null, 6000);
+    r.kind === 'trip' ? importTripSheet(r.data) : statusSheet(r.data);
+  });
+}
+})();
+</script>
+</body>
+</html>
