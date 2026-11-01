@@ -2,6 +2,8 @@
 
 A packing and shopping checklist app for phones. It works offline, and the Barbados list is built in.
 
+**How to use it for a new holiday:** see [Holiday checklist app](Holiday%20checklist%20app.md).
+
 ## Files
 
 | File | What it is |
