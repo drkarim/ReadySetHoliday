@@ -1070,6 +1070,36 @@ async function findShortLink(t) {
   return null;
 }
 
+/* The published list a trip came from, matched by uid only (never by name, so a user's own
+   trip that happens to share a name doesn't pick up someone else's list). */
+async function publishedSlug(t, signal) {
+  if (!hosted()) return null;
+  let idx = {}, r;
+  try { r = await fetch('lists/lists.json', {cache:'no-store', signal}); }
+  catch (e) { throw new Error('unreachable'); } // can't tell whether this trip is published
+  try { if (r.ok) idx = await r.json(); } catch (e) {}
+  const slug = Object.keys(idx).find(k => idx[k] && idx[k].uid === t.uid);
+  if (slug) return slug;
+  const m = /^list-([a-z0-9-]{1,80})$/.exec(t.uid);
+  return m ? m[1] : null;
+}
+
+/* Latest rows of a trip's published CSV: {rows} on success, {published:false} when the trip has
+   no published list, {published:true} when it has one that couldn't be fetched or read. */
+async function fetchPublishedRows(t, ms = 6000) {
+  const ac = new AbortController(), timer = setTimeout(() => ac.abort(), ms);
+  let slug = true; // stays true if lists.json itself can't be reached: report as "couldn't check"
+  try {
+    slug = await publishedSlug(t, ac.signal);
+    if (!slug) return {published:false};
+    const r = await fetch('lists/' + slug + '.csv', {cache:'no-store', signal: ac.signal});
+    if (!r.ok) return {published:true};
+    const res = rowsFromCSV(await r.text());
+    return !res.error && normItems(res.rows).length ? {published:true, rows:res.rows} : {published:true};
+  } catch (e) { return {published: !!slug}; }
+  finally { clearTimeout(timer); }
+}
+
 // Returns an error message, or null once the "Add a shared list" sheet is showing.
 async function loadList(slug) {
   if (!/^[a-z0-9-]{1,80}$/.test(slug)) return 'That list link doesn’t look right.';
@@ -1269,9 +1299,20 @@ function newTripSheet() {
       const skipped = res.rows.length - count;
       create(m, res.rows, `Imported ${plural(count, 'item')}` + (skipped ? ` (${skipped} empty rows skipped)` : ''));
     };
-    if ($('#n_dup')) $('#n_dup').onclick = () => {
-      const m = need(), src = getTrip($('#n_from').value);
-      if (m && src) create(m, src.items.map(it => ({...it, packed:'no'})), `Copied ${plural(src.items.length, 'item')} from ${src.name}`);
+    if ($('#n_dup')) $('#n_dup').onclick = async () => {
+      const m = need(), src = getTrip($('#n_from').value), btn = $('#n_dup');
+      if (!m || !src) return;
+      // Prefer the latest published version of the list; fall back to the copy saved on this phone.
+      let pub = {published:false};
+      if (hosted()) {
+        btn.disabled = true; btn.textContent = 'Getting the latest list…';
+        pub = await fetchPublishedRows(src);
+        if (!sheet.open || !btn.isConnected) return;
+        btn.disabled = false; btn.textContent = 'Copy those items';
+      }
+      const rows = pub.rows || src.items, n = pub.rows ? normItems(rows).length : rows.length;
+      const note = pub.rows ? ' (latest published list)' : pub.published ? ' (saved copy, couldn’t check for a newer list)' : '';
+      create(m, rows.map(it => ({...it, packed:'no'})), `Copied ${plural(n, 'item')} from ${src.name}${note}`);
     };
     $('#n_blank').onclick = () => { const m = need(); if (m) create(m, []); };
   });
