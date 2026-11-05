@@ -1070,18 +1070,30 @@ async function findShortLink(t) {
   return null;
 }
 
-/* The published list a trip came from, matched by uid only (never by name, so a user's own
-   trip that happens to share a name doesn't pick up someone else's list). */
+/* The published list a trip came from: by uid first, then by name (ignoring a " (copy)" suffix)
+   against lists.json. Matching by name is safe because reuse only ever adds missing items. */
 async function publishedSlug(t, signal) {
   if (!hosted()) return null;
   let idx = {}, r;
   try { r = await fetch('lists/lists.json', {cache:'no-store', signal}); }
   catch (e) { throw new Error('unreachable'); } // can't tell whether this trip is published
   try { if (r.ok) idx = await r.json(); } catch (e) {}
-  const slug = Object.keys(idx).find(k => idx[k] && idx[k].uid === t.uid);
-  if (slug) return slug;
+  const keys = Object.keys(idx).filter(k => idx[k]);
+  const byUid = keys.find(k => idx[k].uid === t.uid);
+  if (byUid) return byUid;
   const m = /^list-([a-z0-9-]{1,80})$/.exec(t.uid);
-  return m ? m[1] : null;
+  if (m) return m[1];
+  const name = clean(t.name).replace(/\s*\(copy\)$/i, '');
+  return keys.find(k => sameName(idx[k].name || k, name)) || null;
+}
+
+/* Saved items plus any published rows whose item name isn't already in the saved list.
+   Added rows get fresh ids (normItems assigns them) so they can't clash with items added on the phone. */
+function mergePublished(saved, rows) {
+  const have = new Set(saved.map(it => clean(it.item).toLowerCase()));
+  const added = rows.filter(r => clean(r.item) && !have.has(clean(r.item).toLowerCase()) && have.add(clean(r.item).toLowerCase()))
+    .map(r => ({...r, id: ''}));
+  return {rows: [...saved, ...added], added: added.length};
 }
 
 /* Latest rows of a trip's published CSV: {rows} on success, {published:false} when the trip has
@@ -1302,17 +1314,18 @@ function newTripSheet() {
     if ($('#n_dup')) $('#n_dup').onclick = async () => {
       const m = need(), src = getTrip($('#n_from').value), btn = $('#n_dup');
       if (!m || !src) return;
-      // Prefer the latest published version of the list; fall back to the copy saved on this phone.
+      // Copy the trip saved on this phone, plus any items added to its published list since.
       let pub = {published:false};
       if (hosted()) {
-        btn.disabled = true; btn.textContent = 'Getting the latest list…';
+        btn.disabled = true; btn.textContent = 'Checking for new items…';
         pub = await fetchPublishedRows(src);
         if (!sheet.open || !btn.isConnected) return;
         btn.disabled = false; btn.textContent = 'Copy those items';
       }
-      const rows = pub.rows || src.items, n = pub.rows ? normItems(rows).length : rows.length;
-      const note = pub.rows ? ' (latest published list)' : pub.published ? ' (saved copy, couldn’t check for a newer list)' : '';
-      create(m, rows.map(it => ({...it, packed:'no'})), `Copied ${plural(n, 'item')} from ${src.name}${note}`);
+      const {rows, added} = pub.rows ? mergePublished(src.items, pub.rows) : {rows: src.items, added: 0};
+      const note = pub.rows ? (added ? ` + ${added} new from the published list` : ' (up to date with the published list)')
+        : pub.published ? ' (saved copy, couldn’t check for a newer list)' : '';
+      create(m, rows.map(it => ({...it, packed:'no'})), `Copied ${plural(src.items.length, 'item')} from ${src.name}${note}`);
     };
     $('#n_blank').onclick = () => { const m = need(); if (m) create(m, []); };
   });
